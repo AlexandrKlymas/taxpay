@@ -29,6 +29,8 @@ idea
 /core/custom/define.php.example
 /core/custom/routes.php.example
 /core/composer.json
+core/custom/composer.json.example
+assets/templates/index.html
 /assets/files/exchange/bank/export/arc/b2021/b2021.01/
 /assets/modules/clientsettings/config/tab10.php.sample
 /assets/modules/clientsettings/config/tab20.php.sample
