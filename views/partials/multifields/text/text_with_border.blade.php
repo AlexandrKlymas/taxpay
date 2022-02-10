@@ -1,0 +1,1 @@
+<div class="box contract-box text-wrap">{!! $block['text'] !!}</div>

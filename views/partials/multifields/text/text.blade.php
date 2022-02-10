@@ -1,0 +1,1 @@
+<div class="details-box text-wrap">{!! $block['text'] !!}</div>

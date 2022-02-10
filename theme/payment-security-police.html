@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	<title>GOVPAY24</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+	<link rel="manifest" href="favicon/site.webmanifest">
+	<link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+</head>
+<body>
+<div id="wrapper">
+	<header id="main-header" class="main-header">
+		<div class="container header-container">
+			<a href="/" class="logo">
+				<img src="images/logo.svg" alt="" title="">
+			</a>
+			<div class="search-wrap">
+				<button id="search-trigger" class="search-trigger" aria-label="search" aria-labelledby="search"></button>
+				<div class="search">
+					<form class="form">
+						<input name="search" type="search" placeholder="Пошук">
+						<input type="submit" class="search-submit" value="">
+					</form>
+				</div>
+			</div>
+			<div class="header-right">
+				<nav class="main-nav">
+					<ul>
+						<li class="menu-item-has-children"><a href="#">Послуги</a>
+							<ul>
+								<li class="current-menu-item"><a href="#">Міністрерство внутрішніх справ</a></li>
+								<li><a href="#">Міністерство юстиції</a></li>
+								<li><a href="#">Міністерство фінансів</a></li>
+								<li><a href="#">Міністерство освіти і науки</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Питання та відповіді</a></li>
+						<li><a href="#">Оферта</a></li>
+						<li><a href="#">Контакти</a></li>
+					</ul>
+				</nav>                       
+				<a href="#feedbackModal" class="btn-callback" data-toggle="modal">Зворотній зв’язок</a>
+			</div>	
+			<button id="nav-trigger" class="nav-trigger" aria-label="Menu" aria-labelledby="main-header">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
+	</header>
+
+	<main role="main" class="main">
+		<div class="container">
+			<h1>Оплата послуг Поліції охорони</h1>
+			<div class="row payment-services">
+				<div class="col payment-services-left">
+					<div class="box box-form">
+						<p class="title">ЗАПОВНИТИ ФОРМУ:</p>
+						<form action="" class="form-payment">
+							<div class="form-group">
+								<label for="yourName">Прізвище, ім`я та по-батькові</label>
+								<input id="yourName" name="yourName" type="text" placeholder="Петров Петр Сергеевич">
+							</div>
+							<div class="form-group">
+								<label for="yourAddress">Адреса</label>
+								<input id="yourAddress" name="yourAddress" type="text" placeholder="пр. Вавилонский 55, кв.77">
+							</div>
+
+							<div class="row form-row">
+								<div class="col-6 form-group">
+									<label for="period1">Період сплати з:</label>
+									<input id="period1" name="period1" type="text" placeholder="13.11.2020">
+								</div>
+								<div class="col-6 form-group">
+									<label for="period2">Період сплати по:</label>
+									<input id="period2" name="period2" type="text" placeholder="13.11.2020">
+								</div>
+							</div>
+
+							<div class="row form-row">
+								<div class="col-6 form-group">
+									<label for="yourNum">Номер особового рахунку</label>
+									<input id="yourNum" name="yourNum" type="text" placeholder="123456789">
+								</div>
+								<div class="col-6 form-group">
+									<label for="yourSumm">Сума сплати:</label>
+									<div class="input-group">
+										<input id="yourSumm" name="yourSumm" type="text" placeholder="0.00">
+										<div class="input-group-text">
+								        	грн
+								        </div>
+									</div>
+								</div>
+							</div>
+
+							<p class="summ">
+								До сплати: 0.00<span>грн</span>
+							</p>
+
+							<p>Натискаючи кнопку "Продовжити" Ви погоджуєтеся з умовами <a href="#">публічного договору</a>.</p>
+
+							<div class="form-footer">
+								<div class="back-wrap">
+									<a href="#" class="back">Назад</a>
+								</div>
+								<input type="submit" class="btn" value="Продовжити">
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="col payment-services-right">
+					<div class="text-wrap">
+						<h4>Шановні користувачі!</h4>
+						<ul>
+							<li>Дана послуга пропонує Вам заощадити свій час та заповнити необхідні дані в онлайн режимі для сплати за охорону квартири чи об’єкту</li>
+							<li>Для оплати просто вкажіть коректний номер особового рахунку</li>
+						</ul>
+						<blockquote>
+							Щоб отримати особовий рахунок для сплати за послуги Поліції охорони, потрібно звернутися до бухгалтерії Вашого районного відділу Поліції охорони
+						</blockquote>
+						<ul>
+							<li>Кошти будуть перераховані на рахунки Поліції охорони, протягом поточного операційного банківського дня.</li>
+							<li>Сервісний збір за надані послуги складає 3 %, мінімум 9 гривень.</li>
+						</ul>
+						<h4>Номер особового рахунку має складатися:</h4>
+						<ul>
+							<li>1 цифр (зразок по м. Києву 01001000001)</li>
+							<li>9 цифр в Запорізькій області ( 620000001)</li>
+						</ul>
+						<h4>Департамент Поліції охорони України:</h4>
+						<ul>
+							<li>вул. Малопідвальна, 5, м. Київ, 01001</li>
+							<li>(044) 206-39-39 - (чергова частина)</li>
+							<li>email: <a href="mailto:dpo_office@police.gov.ua">dpo_office@police.gov.ua</a></li>
+							<li>інформація: <a href="#">регіональні Управління Поліції охорони</a></li>
+							<li>джерело: <a href="https://securitypolice.com.ua/" target="_blank">https://securitypolice.com.ua/</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer class="main-footer">
+		<div class="container footer-container">
+			<div class="image-row">
+				<span class="img">
+					<span><img src="images/visa.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/master-card.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/prostir.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/g-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/apple-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/liqpay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/industrilbank.png" alt=""></span>
+				</span>
+			</div>
+			<div class="copyright">
+				<p>© 2021. ТОВ “Державнi платежi”</p>
+				<p>Всі права захищені законодавством України з авторського права.</p>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-header">
+				<p class="modal-title">Зворотній зв’язок</p>
+				<p class="desc">Залиште свій номер і ми вам передзвонимо. <br>
+				Графік роботи: Пн-Пт: 8.00-18.30</p>
+			</div>
+			<div class="modal-body">
+				<form action="">
+					<div class="row form-row">
+						<div class="col-4 form-group">
+							<label for="yourName2">ім`я</label>
+							<input id="yourName2" name="yourName2" type="text" placeholder="Введите имя">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourTel2">Телефон</label>
+							<input id="yourTel2" class="input-phone" name="yourTel2" type="tel" placeholder="+38 (___) ___-__-__">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourEmail2">email</label>
+							<input id="yourEmail2" name="yourEmail2" type="email" placeholder="Name@gmail.com">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="message2">Повідомлення</label>
+						<textarea id="message2" name="message2" placeholder="Введіть повідомлення"></textarea>
+					</div>
+
+					<div class="text-center">
+						<input type="submit" class="btn" value="Надiслати">
+					</div>
+				</form>	
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.inputmask.bundle.min.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

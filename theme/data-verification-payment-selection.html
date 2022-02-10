@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	<title>GOVPAY24</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+	<link rel="manifest" href="favicon/site.webmanifest">
+	<link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+</head>
+<body>
+<div id="wrapper">
+	<header id="main-header" class="main-header">
+		<div class="container header-container">
+			<a href="/" class="logo">
+				<img src="images/logo.svg" alt="" title="">
+			</a>
+			<div class="search-wrap">
+				<button id="search-trigger" class="search-trigger" aria-label="search" aria-labelledby="search"></button>
+				<div class="search">
+					<form class="form">
+						<input name="search" type="search" placeholder="Пошук">
+						<input type="submit" class="search-submit" value="">
+					</form>
+				</div>
+			</div>
+			<div class="header-right">
+				<nav class="main-nav">
+					<ul>
+						<li class="menu-item-has-children"><a href="#">Послуги</a>
+							<ul>
+								<li class="current-menu-item"><a href="#">Міністрерство внутрішніх справ</a></li>
+								<li><a href="#">Міністерство юстиції</a></li>
+								<li><a href="#">Міністерство фінансів</a></li>
+								<li><a href="#">Міністерство освіти і науки</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Питання та відповіді</a></li>
+						<li><a href="#">Оферта</a></li>
+						<li><a href="#">Контакти</a></li>
+					</ul>
+				</nav>                       
+				<a href="#feedbackModal" class="btn-callback" data-toggle="modal">Зворотній зв’язок</a>
+			</div>	
+			<button id="nav-trigger" class="nav-trigger" aria-label="Menu" aria-labelledby="main-header">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
+	</header>
+
+	<main role="main" class="main">
+		<div class="container">
+			<h1>Оплата послуг Поліції охорони</h1>
+			<h3>Перевірте правильність введених даних та оберiть спосiб оплати</h3>
+			<div class="box verification-box">
+				<div class="row">
+					<div class="col-6">
+						<h4 class="box-title">До сплати</h4>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Прізвище, ім'я, по батькові:</span>
+								<span class="val">Петров Петро Петрович</span>
+								<button class="btn-edit" aria-label="edit">
+									<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.83645 2.62707L13.0543 5.84492L4.90899 13.9903L1.69293 10.7724L9.83645 2.62707ZM15.4961 1.851L14.061 0.415948C13.5064 -0.138649 12.6059 -0.138649 12.0494 0.415948L10.6748 1.79058L13.8926 5.00846L15.4961 3.40503C15.9262 2.97485 15.9262 2.28115 15.4961 1.851ZM0.0089546 15.2954C-0.0496067 15.5589 0.188347 15.7951 0.451933 15.731L4.03772 14.8616L0.821664 11.6437L0.0089546 15.2954Z"/></svg>
+								</button>
+							</div>
+							<div class="data-edit">
+								<input id="name" name="name" type="text" value="Петров Петро Петрович">
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Адреса:</span>
+								<span class="val">Туполева 16/2</span>
+								<button class="btn-edit" aria-label="edit">
+									<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.83645 2.62707L13.0543 5.84492L4.90899 13.9903L1.69293 10.7724L9.83645 2.62707ZM15.4961 1.851L14.061 0.415948C13.5064 -0.138649 12.6059 -0.138649 12.0494 0.415948L10.6748 1.79058L13.8926 5.00846L15.4961 3.40503C15.9262 2.97485 15.9262 2.28115 15.4961 1.851ZM0.0089546 15.2954C-0.0496067 15.5589 0.188347 15.7951 0.451933 15.731L4.03772 14.8616L0.821664 11.6437L0.0089546 15.2954Z"/></svg>
+								</button>
+							</div>
+							<div class="data-edit">
+								<input id="addr" name="addr" type="text" value="Туполева 16/2">
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Ідентифікаційний номер:</span>
+								<span class="val">123456789</span>
+								<button class="btn-edit" aria-label="edit">
+									<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.83645 2.62707L13.0543 5.84492L4.90899 13.9903L1.69293 10.7724L9.83645 2.62707ZM15.4961 1.851L14.061 0.415948C13.5064 -0.138649 12.6059 -0.138649 12.0494 0.415948L10.6748 1.79058L13.8926 5.00846L15.4961 3.40503C15.9262 2.97485 15.9262 2.28115 15.4961 1.851ZM0.0089546 15.2954C-0.0496067 15.5589 0.188347 15.7951 0.451933 15.731L4.03772 14.8616L0.821664 11.6437L0.0089546 15.2954Z"/></svg>
+								</button>
+							</div>
+							<div class="data-edit">
+								<input id="num" name="num" type="text" value="123456789">
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">РСЦ та послуги</span>
+								<span class="val"></span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Регіон:</span>
+								<span class="val">м. Київ</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Послуга:</span>
+								<span class="val">За видачу міжнародного посвідчення водія (5.70 грн)</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<h4 class="box-title">Отримувач</h4>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">ЄДРПОУ:</span>
+								<span class="val">123456</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Розрахунковий рахунок:</span>
+								<span class="val">UA12345678900987654321</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Назва отримувача:</span>
+								<span class="val">РСЦ МВС у м. Київ</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Банк отримувача:</span>
+								<span class="val">МВС у м. Київ</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Призначення платежу:</span>
+								<span class="val">*: 12345678900987654321: Петров Петр Петрович. За видачу міжнародного посвідчення водія</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6 box-wrap">
+					<div class="box">
+						<h4 class="box-title">Оплати</h4>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Сумма оплати:</span>
+								<span class="val">5.70 грн</span>
+								<button class="btn-edit" aria-label="edit">
+									<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.83645 2.62707L13.0543 5.84492L4.90899 13.9903L1.69293 10.7724L9.83645 2.62707ZM15.4961 1.851L14.061 0.415948C13.5064 -0.138649 12.6059 -0.138649 12.0494 0.415948L10.6748 1.79058L13.8926 5.00846L15.4961 3.40503C15.9262 2.97485 15.9262 2.28115 15.4961 1.851ZM0.0089546 15.2954C-0.0496067 15.5589 0.188347 15.7951 0.451933 15.731L4.03772 14.8616L0.821664 11.6437L0.0089546 15.2954Z"/></svg>
+								</button>
+							</div>
+							<div class="data-edit">
+								<input id="summ" name="summ" type="text" value="5.70">
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Сумма сервісного збору, грн:</span>
+								<span class="val">1500.70 грн</span>
+							</div>
+						</div>
+						<div class="data-row">
+							<div class="data">
+								<span class="row-name">Всього до сплати: </span>
+								<span class="val">1600.80 грн</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-6 box-wrap">
+					<div class="box box-payment-metods">
+						<h4 class="box-title">Оберіть спосіб оплати:</h4>
+						<div class="radio-group payment-metods">
+							<div class="metod">
+								<input id="method1" name="payment" type="radio">
+								<label for="method1"><img src="images/g-pay-md.png" alt=""></label>
+							</div>
+							<div class="metod">
+								<input id="method2" name="payment" type="radio">
+								<label for="method2"><img src="images/apple-pay-md.png" alt=""></label>
+							</div>
+							<div class="metod">
+								<input id="method3" name="payment" type="radio">
+								<label for="method3"><img src="images/masterpass-md.png" alt=""></label>
+							</div>
+							<div class="metod">
+								<input id="method4" name="payment" type="radio">
+								<label for="method4"><img src="images/visa-checkout-md.png" alt=""></label>
+							</div>
+							<div class="metod full">
+								<input id="method5" name="payment" type="radio">
+								<label for="method5"><img src="images/card.png" alt=""><span>Сплатити картою</span></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-footer">
+				<div class="back-wrap">
+					<a href="#" class="back">Назад</a>
+				</div>
+				<input type="submit" class="btn" value="Продовжити">
+			</div>
+			
+		</div>
+		
+	</main>
+
+	<footer class="main-footer">
+		<div class="container footer-container">
+			<div class="image-row">
+				<span class="img">
+					<span><img src="images/visa.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/master-card.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/prostir.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/g-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/apple-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/liqpay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/industrilbank.png" alt=""></span>
+				</span>
+			</div>
+			<div class="copyright">
+				<p>© 2021. ТОВ “Державнi платежi”</p>
+				<p>Всі права захищені законодавством України з авторського права.</p>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-header">
+				<p class="modal-title">Зворотній зв’язок</p>
+				<p class="desc">Залиште свій номер і ми вам передзвонимо. <br>
+				Графік роботи: Пн-Пт: 8.00-18.30</p>
+			</div>
+			<div class="modal-body">
+				<form action="">
+					<div class="row form-row">
+						<div class="col-4 form-group">
+							<label for="yourName2">ім`я</label>
+							<input id="yourName2" name="yourName2" type="text" placeholder="Введите имя">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourTel2">Телефон</label>
+							<input id="yourTel2" class="input-phone" name="yourTel2" type="tel" placeholder="+38 (___) ___-__-__">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourEmail2">email</label>
+							<input id="yourEmail2" name="yourEmail2" type="email" placeholder="Name@gmail.com">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="message2">Повідомлення</label>
+						<textarea id="message2" name="message2" placeholder="Введіть повідомлення"></textarea>
+					</div>
+
+					<div class="text-center">
+						<input type="submit" class="btn" value="Надiслати">
+					</div>
+				</form>	
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.inputmask.bundle.min.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

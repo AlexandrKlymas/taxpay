@@ -1,0 +1,31 @@
+{
+    "name": "evolutioncms/custom",
+    "require": {
+        "ramsey/uuid": "*",
+        "liqpay/liqpay": "*",
+        "barryvdh/laravel-ide-helper": "*",
+        "phpoffice/phpspreadsheet": "*",
+        "telegram-bot/api": "*",
+        "mpdf/mpdf": "*",
+        "peppeocchi/php-cron-scheduler": "^3.1",
+        "ddaproduction/evocms-queue": "0.*",
+        "chillerlan/php-qrcode": "dev-main",
+        "sendpulse/rest-api": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EvolutionCMS\\Main\\Modules\\Orders\\": "packages/main/modules/Orders/src/",
+            "EvolutionCMS\\Main\\Modules\\OrdersArchive\\": "packages/main/modules/OrdersArchive/src/",
+            "EvolutionCMS\\Main\\Modules\\FineSearchHistory\\": "packages/main/modules/FineSearchHistory/src/",
+            "EvolutionCMS\\Main\\": "packages/main/src/",
+            "DocumentParams\\": "../../assets/plugins/documentparams/lib/",
+            "EvolutionCMS\\Pwa\\": "packages/pwa/src/"
+        },
+        "files": [
+            "packages/main/functions.php"
+        ],
+        "classmap": [
+            "../../assets/lib/Helpers/"
+        ]
+    }
+}

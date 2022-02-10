@@ -1,0 +1,19 @@
+{
+  "name": "evolutioncms/pwa",
+  "require": {
+
+  },
+  "autoload": {
+    "psr-4": {
+      "EvolutionCMS\\Pwa\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "EvolutionCMS\\Pwa\\PwaServiceProvider"
+      ]
+
+    }
+  }
+}

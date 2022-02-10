@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	<title>GOVPAY24</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+	<link rel="manifest" href="favicon/site.webmanifest">
+	<link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+</head>
+<body>
+<div id="wrapper">
+	<header id="main-header" class="main-header">
+		<div class="container header-container">
+			<a href="/" class="logo">
+				<img src="images/logo.svg" alt="" title="">
+			</a>
+			<div class="search-wrap">
+				<button id="search-trigger" class="search-trigger" aria-label="search" aria-labelledby="search"></button>
+				<div class="search">
+					<form class="form">
+						<input name="search" type="search" placeholder="Пошук">
+						<input type="submit" class="search-submit" value="">
+					</form>
+				</div>
+			</div>
+			<div class="header-right">
+				<nav class="main-nav">
+					<ul>
+						<li class="menu-item-has-children"><a href="#">Послуги</a>
+							<ul>
+								<li class="current-menu-item"><a href="#">Міністрерство внутрішніх справ</a></li>
+								<li><a href="#">Міністерство юстиції</a></li>
+								<li><a href="#">Міністерство фінансів</a></li>
+								<li><a href="#">Міністерство освіти і науки</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Питання та відповіді</a></li>
+						<li><a href="#">Оферта</a></li>
+						<li><a href="#">Контакти</a></li>
+					</ul>
+				</nav>                       
+				<a href="#feedbackModal" class="btn-callback" data-toggle="modal">Зворотній зв’язок</a>
+			</div>	
+			<button id="nav-trigger" class="nav-trigger" aria-label="Menu" aria-labelledby="main-header">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
+	</header>
+
+	<main role="main" class="main successful-page">
+		<div class="container">
+			<h1>Успішна оплата за послугу</h1>
+			<div class="row successful-row">
+				<div class="col image">
+					<img src="images/successful.svg" alt="">
+				</div>
+				<div class="col text-wrap text">
+					<p><strong>Дякуємо, що скористалися нашим сервісом!</strong></p>
+					<ul>
+						<li>Ваша оплата пройшла успішно. Кошти будуть перераховані на рахунок вибранної Вами послуги, протягом поточного операційного банківського дня.</li>
+						<li>Якщо не має можливості роздрукувати квитанцію. Ви можете отримати квитанцію про оплату на ваш емайл, вкажіть його в полі і натисніть кнопку “Відправити”.</li>
+						<li>За бажанням Ви можете  залишити свій номер телефону для інформування про нові послуги.</li>
+					</ul>
+					<p><strong>З повагою, команда Govpay24.com</strong></p>
+					<div class="successful-footer">
+						<button type="button" class="successful-btn to-email" data-toggle="modal" data-target="#sendToEmail">
+							Вiдправити квитанцію на Email
+						</button>
+						<span>Або</span>
+						<a href="#" class="successful-btn to-print">
+							Роздрукувати квитанцію
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<div class="modal fade" id="sendToEmail" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-sm modal-dialog modal-dialog-centered send-to-email" role="document">
+			<div class="modal-content">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-header">
+					<p class="modal-title">Надіслати квитанцію на Email</p>
+				</div>
+				<div class="modal-body">
+					<form action="">
+						<div class="form-group">
+							<label for="yourEmail">Email</label>
+							<input id="yourEmail" name="yourEmail" type="email" placeholder="Введите Email">
+						</div>
+						<div class="text-center">
+							<input type="submit" class="btn" value="Надiслати">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="main-footer">
+		<div class="container footer-container">
+			<div class="image-row">
+				<span class="img">
+					<span><img src="images/visa.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/master-card.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/prostir.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/g-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/apple-pay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/liqpay.png" alt=""></span>
+				</span>
+				<span class="img">
+					<span><img src="images/industrilbank.png" alt=""></span>
+				</span>
+			</div>
+			<div class="copyright">
+				<p>© 2021. ТОВ “Державнi платежi”</p>
+				<p>Всі права захищені законодавством України з авторського права.</p>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-header">
+				<p class="modal-title">Зворотній зв’язок</p>
+				<p class="desc">Залиште свій номер і ми вам передзвонимо. <br>
+				Графік роботи: Пн-Пт: 8.00-18.30</p>
+			</div>
+			<div class="modal-body">
+				<form action="">
+					<div class="row form-row">
+						<div class="col-4 form-group">
+							<label for="yourName2">ім`я</label>
+							<input id="yourName2" name="yourName2" type="text" placeholder="Введите имя">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourTel2">Телефон</label>
+							<input id="yourTel2" class="input-phone" name="yourTel2" type="tel" placeholder="+38 (___) ___-__-__">
+						</div>
+						<div class="col-4 form-group">
+							<label for="yourEmail2">email</label>
+							<input id="yourEmail2" name="yourEmail2" type="email" placeholder="Name@gmail.com">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="message2">Повідомлення</label>
+						<textarea id="message2" name="message2" placeholder="Введіть повідомлення"></textarea>
+					</div>
+
+					<div class="text-center">
+						<input type="submit" class="btn" value="Надiслати">
+					</div>
+				</form>	
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.inputmask.bundle.min.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

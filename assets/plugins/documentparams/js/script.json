@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "BasicJS" : {
+      "version":"1.5.0",
+      "src":"assets/plugins/documentparams/js/scripts.js"
+    }
+  }
+}
