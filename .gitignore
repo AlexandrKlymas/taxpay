@@ -2,6 +2,14 @@
 idea
 /core/custom/config/cms/.dev
 /core/vendor/
+.tx/
+.gitattributes
+/assets/backup/
+/assets/tvs/
+/core/composer.lock
+/core/.phpstorm.meta.php
+/core/_ide_helper.php
+/core/_ide_helper_models.php
 /assets/plugins/multifields/config/example.slider.php
 /assets/plugins/multifields/config/example.table.php
 /assets/plugins/multifields/config/example.thumb.php
@@ -14,8 +22,12 @@ idea
 /core/storage/logs/
 /core/config/database/connections/
 /core/custom/config/app/providers/IdeHelperServiceProvider.php
+/core/custom/.env.example
 /.htaccess
 /test2.php
+/core/custom/config/tracy/
+/core/custom/define.php.example
+/core/custom/routes.php.example
 /core/composer.json
 /assets/files/exchange/bank/export/arc/b2021/b2021.01/
 /assets/modules/clientsettings/config/tab10.php.sample
