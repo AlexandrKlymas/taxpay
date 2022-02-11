@@ -21,21 +21,37 @@ class SudyTaxFormConfigurator extends BaseFormConfigurator implements IFormConfi
         return [
             'edrpou' => $formData['edrpou'],
             'iban' => $formData['iban'],
-            'mfo'=>$formData['mfo'],
-            'sum'=>$formData['sum'],
-            'order'=>$formData['order'],
-            'full_name'=>$formData['full_name'],
-            'email'=>$formData['email'],
+            'mfo' => $formData['mfo'],
+            'sum' => $formData['sum'],
+            'order' => $formData['order'],
+            'full_name' => $formData['full_name'],
+            'email' => $formData['email'],
 
-            'holder'=>$formData['holder'],
-            'bank_name'=>$formData['bank_name'],
-            'details'=>$formData['details'],
-            'backref'=>$formData['backref'],
+            'holder' => $formData['holder'],
+            'bank_name' => $formData['bank_name'],
+            'details' => $formData['details'],
+            'backref' => $formData['backref'],
         ];
     }
 
     public function renderDataForPreview($fieldValues): array
     {
         return $fieldValues;
+    }
+
+    public function getValidationRules(): array
+    {
+        return [
+            'edrpou' => 'required',
+            'iban' => 'required',
+            'mfo' => 'required',
+            'sum' => 'required',
+            'order' => 'required',
+            'full_name' => 'required',
+            'holder' => 'required',
+            'bank_name' => 'required',
+            'details' => 'required',
+            'backref' => 'required',
+        ];
     }
 }

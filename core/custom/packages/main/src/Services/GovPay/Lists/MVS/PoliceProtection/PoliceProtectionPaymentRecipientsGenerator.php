@@ -3,6 +3,8 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\PoliceProtection;
 
+use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Support\FieldHelpers;
@@ -10,17 +12,17 @@ use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\PoliceProtectionCode;
 
-class PoliceProtectionPaymentRecipientsGenerator implements \EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator
+class PoliceProtectionPaymentRecipientsGenerator implements IPaymentRecipientsGenerator
 {
 
-    private $sumCalculator;
+    private SumCalculator $sumCalculator;
 
     public function __construct()
     {
-        $this->sumCalculator = new \EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator();
+        $this->sumCalculator = new SumCalculator();
     }
 
-    private $purposeTemplate = '[+police_security_account+], з [+period_from+] по [+period_to+], [+full_name+], [+address+]';
+    private string $purposeTemplate = '[+police_security_account+], з [+period_from+] по [+period_to+], [+full_name+], [+address+]';
 
     public function getPaymentRecipients($formFieldsValues): array
     {

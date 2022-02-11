@@ -3,7 +3,6 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\PoliceProtection;
 
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Fields\AddressField;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\DateField;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\SumField;
@@ -13,7 +12,7 @@ use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Fields\PoliceSecurityAccountField;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
 
-class PoliceProtectionFormConfigurator extends BaseFormConfigurator implements IFormConfigurator
+class PoliceProtectionFormConfigurator extends BaseFormConfigurator
 {
     public function getFormConfig(): array
     {

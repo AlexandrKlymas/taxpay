@@ -8,14 +8,13 @@ use EvolutionCMS\Main\Services\GovPay\Factories\Calculators\CommissionsCalculato
 use EvolutionCMS\Main\Services\GovPay\Factories\Recipients\BankRecipientDtoFactory;
 use EvolutionCMS\Main\Services\GovPay\Factories\Recipients\GovPayRecipientDtoFactory;
 use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
-use EvolutionCMS\Main\Services\GovPay\Models\Commission;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusReady;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusSuccess;
 use Exception;
 use Illuminate\Support\Facades\File;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 
@@ -23,7 +22,7 @@ class ServiceManager
 {
 
 
-    public function renderForm($serviceId)
+    public function renderForm($serviceId): string
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
 
@@ -33,7 +32,6 @@ class ServiceManager
     /**
      * @param $serviceId
      * @param $formData
-     * @throws ValidationException
      */
     public function validate($serviceId, $formData)
     {
@@ -41,59 +39,24 @@ class ServiceManager
         $serviceFactory->getDataValidator()->validate($formData);
     }
 
-    public function getCommission($serviceId)
+    public function getCommission(int $serviceId): array
     {
-        $commission = [
-            'total' => [
+        $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
 
-            ],
-            'pension_fund' => [
-
-            ]
-        ];
-        $serviceCommission = Commission::where('form_id', $serviceId)->limit(1)->first();
-        if ($serviceCommission) {
-            $commission['total'] = [
-                "fix_summ" => $serviceCommission->fix_summ,
-                "percent" => $serviceCommission->percent,
-                "min_summ" => $serviceCommission->min_summ,
-                "max_summ" => $serviceCommission->max_summ,
-            ];
-        }
-        return $commission;
+        return $serviceFactory->getCommissionsManager()->getCommissions();
     }
 
-
-    public function getDataForPreview($serviceId, $formData)
+    public function renderPreview(int $serviceId, array $requestData): string
     {
-        $this->validate($serviceId, $formData);
-
+        $this->validate($serviceId, $requestData);
 
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
-        $finalPaymentCalculator = new FinalPaymentCalculator($serviceId);
 
-        $paymentRecipientGenerator = $serviceFactory->getPaymentRecipientsGenerator();
-        $formConfigurator = $serviceFactory->getFormConfigurator();
-
-        $formFieldsValues = $formConfigurator->getFormFieldsValues($formData);
-
-
-
-        $recipients = $paymentRecipientGenerator->getPaymentRecipients($formFieldsValues);
-
-
-        $previewFormData = $serviceFactory->getFormConfigurator()->renderDataForPreview($formFieldsValues);
-
-        return [
-            'recipient' => end($recipients),
-            'formData' => $previewFormData,
-            'amount' => $finalPaymentCalculator->calculate($formData)
-        ];
+        return $serviceFactory->getPreviewGenerator()->generatePreview($requestData);
     }
 
-    public function createOder($serviceId, $formData): ServiceOrder
+    public function createOder(int $serviceId, array $formData): ServiceOrder
     {
-
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
         $finalPaymentCalculator = new FinalPaymentCalculator($serviceId);
 
@@ -110,7 +73,6 @@ class ServiceManager
 
         $commissions = $commissionsCalculator->calculate($paymentAmountDto);
 
-
         $paymentRecipients[] = BankRecipientDtoFactory::build($commissions->getBankCommission(), $formFieldsValues);
         $paymentRecipients[] = GovPayRecipientDtoFactory::build($commissions->getProfit(), $formFieldsValues);
 
@@ -122,12 +84,6 @@ class ServiceManager
         }
         return $serviceOrder;
     }
-
-
-//    /**
-//     * @param $paymentData
-//     * @param $serviceOrderId
-//     */
 
     public function updateLiqPayPaymentStatus($serviceOrderId, $paymentData)
     {
@@ -145,7 +101,10 @@ class ServiceManager
 
     }
 
-    public function generateInvoice($serviceOrderId,$forced=false)
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
+    public function generateInvoice($serviceOrderId, $forced=false): bool
     {
         $serviceOrder = ServiceOrder::findOrFail($serviceOrderId);
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceOrder->service_id);
@@ -160,7 +119,8 @@ class ServiceManager
         try{
             $pdf = $this->generateInvoicePdfFile($invoiceHtml, $serviceOrder->order_hash);
         }catch (Exception $e){
-            evo()->logEvent(1,3,json_encode($serviceOrder->toArray()),'ErrorInvoicePDF='.$serviceOrder->id);
+            evo()->logEvent(1,3,json_encode($serviceOrder->toArray()),
+                'ErrorInvoicePDF='.$serviceOrder->id);
         }
 
         $serviceOrder->invoice_file_pdf = $pdf??'';
@@ -168,20 +128,19 @@ class ServiceManager
         $serviceOrder->save();
 
         if(!$forced){
-            evo()->invokeEvent('OnInvoicePDFGenerated', [
-                'service_order'=>$serviceOrder,
-            ]);
+            $serviceFactory->getCallbacksService()
+                ->invoicePDFGenerated(['service_order'=>$serviceOrder,]);
         }
-
 
         return false;
     }
 
 
-    public function generateInvoiceHtmlFile($invoiceHtml, $orderHash)
+    public function generateInvoiceHtmlFile($invoiceHtml, $orderHash): string
     {
         $invoiceFileHtml = 'assets/files/invoices/' . $orderHash . '.html';
         File::put(MODX_BASE_PATH . $invoiceFileHtml, $invoiceHtml);
+
         return $invoiceFileHtml;
     }
 
@@ -189,7 +148,7 @@ class ServiceManager
      * @throws MpdfException
      * @throws Exception
      */
-    public function generateInvoicePdfFile($invoiceHtml, $orderHash)
+    public function generateInvoicePdfFile($invoiceHtml, $orderHash): string
     {
         $invoiceFilePdf = 'assets/files/invoices/' . $orderHash . '.pdf';
 
@@ -235,11 +194,16 @@ class ServiceManager
             }
         }
     }
+
+    /**
+     * @throws Exception
+     */
     public function completedServiceOrder(ServiceOrder $confirmedServiceOrder): void
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($confirmedServiceOrder->service_id);
 
-        if ($serviceFactory instanceof IAfterConfirmExecutable && $serviceFactory->getExecutor()->isCompleted($confirmedServiceOrder) !== true) {
+        if ($serviceFactory instanceof IAfterConfirmExecutable
+            && $serviceFactory->getExecutor()->isCompleted($confirmedServiceOrder) !== true) {
             return;
         }
 
@@ -270,6 +234,4 @@ class ServiceManager
             evo()->logEvent(985, 3, $e->getMessage(), 'ExecuteConfirmedServiceOrders');
         }
     }
-
-
 }

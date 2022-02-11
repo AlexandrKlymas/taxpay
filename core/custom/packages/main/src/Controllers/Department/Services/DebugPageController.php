@@ -24,7 +24,6 @@ class DebugPageController
         switch ($s){
             case 'gfs': return $this->gfs($request);
             case 'sudy': return $this->sudyPay($request);
-            case 'sudyback': return $this->sudyCallbacks($request);
             default: echo ''; die();
         }
     }
@@ -48,7 +47,7 @@ class DebugPageController
                 'phone'=>'3456345634563456',
                 'email'=>'klimssalex@gmail.com',
                 'budgetcode'=>'101',
-                'amount'=>'200',
+                'amount'=>'1',
                 'submit'=>'true',
                 'sign'=>''
             ];

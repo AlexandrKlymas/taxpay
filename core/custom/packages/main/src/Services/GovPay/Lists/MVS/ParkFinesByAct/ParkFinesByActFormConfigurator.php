@@ -13,11 +13,9 @@ use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Fields\SeparatorField;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Models\ParkPencodeItem;
-use EvolutionCMS\Main\Services\GovPay\Models\PencodesItem;
 
 class ParkFinesByActFormConfigurator extends BaseFormConfigurator implements IFormConfigurator
 {
-
     public function getFormConfig(): array
     {
         $formConfig = $this->serviceConfig['formConfig'];
@@ -37,6 +35,7 @@ class ParkFinesByActFormConfigurator extends BaseFormConfigurator implements IFo
                     $formConfig['full_name_placeholder']??''
                 ),
             ]),
+
             new SeparatorField('Дані про правопорушення'),
 
             new LayoutFields([
@@ -49,6 +48,7 @@ class ParkFinesByActFormConfigurator extends BaseFormConfigurator implements IFo
                     $formConfig['fine_number_placeholder']??''
                 ),
             ]),
+
             new LayoutFields([
                 new SelectField('region',
                     $formConfig['region_title']??'',
@@ -64,20 +64,17 @@ class ParkFinesByActFormConfigurator extends BaseFormConfigurator implements IFo
                 ),
                 TotalCaptionField::build($formConfig['total_title']??'')
             ])
-
         ];
     }
 
     public function renderDataForPreview($fieldValues): array
     {
-
         return [
             'Прізвище, ім`я та по-батькові'=> $fieldValues['full_name'],
             'Дані про правопорушення'=> '',
             'Регіон'=> $fieldValues['region_title'],
             'Серія постанови'=> $fieldValues['fine_series'],
             'Номер постанови'=> $fieldValues['fine_number'],
-
         ];
     }
 }

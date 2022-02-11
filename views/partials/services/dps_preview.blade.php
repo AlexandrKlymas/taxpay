@@ -17,8 +17,7 @@
                     </div>
                 </div>
             @endforeach
-{{--            //TODO: make dinamic fee--}}
-            <span class="row-name">Сервісний збір складає <strong>2%</strong>, мінімум <strong>9 грн</strong>.</span>
+            <span class="row-name">Сервісний збір складає <strong>{{round($commissions['total']['percent'])}}%</strong>, мінімум <strong>{{$commissions['total']['min_summ']}} грн</strong>.</span>
         </div>
         <div class="col-6">
             <h4 class="box-title">Отримувач</h4>
@@ -42,12 +41,12 @@
                 </div>
             </div>
             @if($recipient->getRecipientBankName())
-            <div class="data-row">
-                <div class="data">
-                    <span class="row-name">Банк отримувача:</span>
-                    <span class="val">{{ $recipient->getRecipientBankName() }}</span>
+                <div class="data-row">
+                    <div class="data">
+                        <span class="row-name">Банк отримувача:</span>
+                        <span class="val">{{ $recipient->getRecipientBankName() }}</span>
+                    </div>
                 </div>
-            </div>
             @endif
             <div class="data-row">
                 <div class="data">
@@ -67,7 +66,7 @@
                 <div class="data data--form">
                     <span class="row-name">Сумма оплати:</span>
                     <form class="form-payment js-service-form" id="service-form" data-validation-form>
-                        @foreach($request as $name=>$value)
+                        @foreach($requestData as $name=>$value)
                             @if($name=='sum')
                                 <input id="sum" name="sum" type="text"
                                        @if(!empty($value)) value="{{$value}}" @endif
@@ -83,7 +82,7 @@
                                        data-validation-has-keyup-event="true"
                                 ><span class="val"> грн</span>
                             @else
-                            <input type="hidden" name="{{$name}}" value="{{$value}}">
+                                <input type="hidden" name="{{$name}}" value="{{$value}}">
                             @endif
                         @endforeach
                     </form>
@@ -104,46 +103,25 @@
         </div>
     </div>
     <div class="col-6 box-wrap">
-        <div class="box box-payment-metods">
-            <h4 class="box-title">Оберіть спосіб оплати:</h4>
-            <div class="radio-group payment-metods ">
-                <div class="metod">
-                    <input id="method1" name="payment_method" type="radio" value="gpay">
-                    <label for="method1"><img src="/theme/images/g-pay-md.png" alt=""></label>
-                </div>
-                <div class="metod flex-50">
-                    <input id="method5" name="payment_method" type="radio" value="card">
-                    <label for="method5"><img src="/theme/images/card.png" alt=""><span>Сплатити карткою</span></label>
-                </div>
-                <div class="metod">
-                    <input id="method2" name="payment_method" type="radio" value="apay">
-                    <label for="method2"><img src="/theme/images/apple-pay-md.png" alt=""></label>
-                </div>
-                <div class="metod">
-                    <input id="method6" name="payment_method" type="radio" value="ppay">
-                    <label for="method6"><img src="/theme/images/privat-24.png" alt=""></label>
-                </div>
-                @if(!empty($error))
-                    <div class="service-error">
-                        {{ $error }}
-                    </div>
-                @endif
-
-            </div>
-        </div>
+        @include('partials.payment_methods')
     </div>
 </div>
 
 <div class="form-footer">
 
     <div class="back-wrap">
-{{--        <a href="{{ redirect()->back()->getTargetUrl() }}" class="back">Назад</a>--}}
+        {{--        <a href="{{ redirect()->back()->getTargetUrl() }}" class="back">Назад</a>--}}
     </div>
     <input type="button" class="btn" value="Сплатити" id="temp-button" onclick="validSum()">
 </div>
 
 <script>
-    let feeInfo = {!! $commissions !!};
+    let commissionsList = {!! json_encode($commissions) !!};
+    let feeInfo = {
+        min:Number(commissionsList.total.min_summ),
+        percent: commissionsList.total.percent / 100
+    };
+
     function calc() {
         let sum = document.getElementById('sum').value;
         let sumdot = sum.replace(',', '.');
@@ -153,6 +131,7 @@
         }
         document.getElementById('fee').textContent = fee;
         document.getElementById('total').textContent = Number(sumdot) + Number(fee);
+
         document.getElementById('sum').value = sumdot;
     }
 
@@ -168,7 +147,6 @@
                     i++;
                 }
             });
-            console.log(i);
             if(i>0){
                 button.setAttribute('type','submit');
                 button.setAttribute('id','create-order-and-pay');

@@ -2,109 +2,42 @@
 
 namespace EvolutionCMS\Main\Controllers\Department\Services;
 
+
 use EvolutionCMS\Facades\UrlProcessor;
-use EvolutionCMS\Main\Controllers\BaseController;
+use EvolutionCMS\Main\Controllers\Department\PreviewServiceController;
+use EvolutionCMS\Main\Controllers\Department\ServiceController;
 use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
 use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Support\SignHelper;
 use EvolutionCMS\Main\Services\GovPay\Support\StrHelper;
-use EvolutionCMS\Main\Services\LiqPay\LiqPayService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use PHPMailer\PHPMailer\Exception;
 
-
-class ECabinetDpsPaymentController extends BaseController
+class ECabinetDpsPaymentController extends PreviewServiceController
 {
-    private bool $debugMode = false;
-    public function render()
-    {
-        $serviceId = $this->evo->documentIdentifier;
+    private bool $publicDebugMode = false;
+    private bool $debugLog = true;
 
-        try {
-            $serviceProcessor = new ServiceManager();
-            $this->data['serviceId'] = $this->evo->documentIdentifier;
-            $this->data['preview'] = $this->preview(new Request($_GET))['preview'];
-            $this->data['commission'] = $serviceProcessor->getCommission($serviceId);
-
-        } catch (ServiceNotFoundException $e) {
-            $this->data['error'] = 'Послуга в розробці';
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function validate(Request $request)
-    {
-        $serviceId = $request->get('service_id');
-
-        $serviceProcessor = new ServiceManager();
-
-        try {
-            $serviceProcessor->validate($serviceId, $request->toArray());
-        } catch (ValidationException $exception) {
-            return [
-                'status' => false,
-                'errors' => $exception->errors()
-            ];
-        }
-
-        return [
-            'status' => true,
-        ];
-    }
-
-    public function preview(Request $request)
-    {
-        $serviceId = $request->get('service_id');
-        $formData = $request->toArray();
-
-        $serviceProcessor = new ServiceManager();
-
-        $data = array_merge(
-            $serviceProcessor->getDataForPreview($serviceId, $formData),
-            ['request'=>$formData]
-        );
-        $commissions = $serviceProcessor->getCommission($serviceId);
-        $data['commissions']['percent'] = floatval($commissions['total']['percent']/100);
-        $data['commissions']['min'] = floatval($commissions['total']['min_summ']);
-        $data['commissions'] = json_encode($data['commissions']);
-        unset($data['request']['q']);
-
-        $preview = View::make('partials.services.dps_preview')->with($data)->render();
-
-        return [
-            'status' => true,
-            'preview' => $preview,
-        ];
-    }
-
-    public function createServiceOrderAndPay(Request $request)
-    {
-    }
-
-    public function finished(){
-        if(!evo()->getLoginUserID()){
-            return;
-        }
-
-        $serviceProcessor = new ServiceManager();
-        $serviceProcessor->executePaidServiceOrders();
-        $serviceProcessor->completedServiceOrders();
-    }
+    /**
+     * @throws Exception
+     */
     public function gfsRoute(Request $request)
     {
+        $serviceId = 165;
         $requestArr = $request->toArray();
 
-        evo()->logEvent(1,1, json_encode($requestArr),'TAX.GOV.UA>'.$requestArr['payername']??'noname');
+        if($this->debugLog){
+            evo()->logEvent(1,1, json_encode($requestArr),'TAX.GOV.UA>'.$requestArr['payername']??'noname');
+        }
 
         unset($requestArr['q']);
 
-        if($this->debugMode){
+        if($this->publicDebugMode){
             dump('Вхідний запит',$requestArr);
         }
 
-        $validator = \Validator::make($requestArr,
+        $validator = Validator::make($requestArr,
             [
                 'recipient'=>'required',
                 'recipientcode'=>'required',
@@ -124,7 +57,7 @@ class ECabinetDpsPaymentController extends BaseController
 
         if ($validator->fails() || !$isValidSign) {
 
-            if($this->debugMode){
+            if($this->publicDebugMode){
                 dump(
                     'Виявлені помилки',
                     $validator->errors()->toArray(),
@@ -137,8 +70,8 @@ class ECabinetDpsPaymentController extends BaseController
                 'errors'=>$validator->errors()->toArray(),
                 'is_valid_sign'=>$isValidSign,
                 'request'=>$requestArr,
-                ]),'TAX.GOV.UA Request Error');
-            if($this->debugMode){
+            ]),'TAX.GOV.UA Request Error');
+            if($this->publicDebugMode){
                 echo "<script>document.querySelector('body').style.backgroundColor = 'black';</script>";
                 die();
             }
@@ -147,7 +80,7 @@ class ECabinetDpsPaymentController extends BaseController
         }
 
         $newRequest = [
-            'service_id'=>165,
+            'service_id'=>$serviceId,
             'recipient_name'=>StrHelper::namePrepare($requestArr['recipient']),
             'bank_edrpou'=>$requestArr['recipientcode'],
             'mfo'=>$requestArr['mfo'],
@@ -162,7 +95,7 @@ class ECabinetDpsPaymentController extends BaseController
             'sum'=>$requestArr['amount'],
         ];
 
-        evo()->sendRedirect(UrlProcessor::makeUrl(165,'','','full').'?'.http_build_query($newRequest));
+        evo()->sendRedirect(UrlProcessor::makeUrl($serviceId,'','','full').'?'.http_build_query($newRequest));
 
     }
 }

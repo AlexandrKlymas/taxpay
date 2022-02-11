@@ -3,6 +3,7 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IInvoiceGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPaymentCalculator;
@@ -29,5 +30,9 @@ class PCRFactory extends BaseServiceFactory implements IServiceFactory
     public function getInvoiceGenerator(): IInvoiceGenerator
     {
         return $this->container->make(PCRInvoiceGenerator::class,$this->dependencies);
+    }
+    public function getCallbacksService(): ICallbackService
+    {
+        return $this->container->make(PCRCallbackService::class,$this->dependencies);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\WeightFinesByAct;
 
 
@@ -12,7 +13,6 @@ use EvolutionCMS\Main\Services\GovPay\Fields\FullNameField;
 use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Fields\SeparatorField;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
-
 
 class WeightFinesByActFormConfigurator extends BaseFormConfigurator implements IFormConfigurator
 {

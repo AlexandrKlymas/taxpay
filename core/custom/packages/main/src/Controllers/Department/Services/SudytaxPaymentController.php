@@ -2,102 +2,28 @@
 
 namespace EvolutionCMS\Main\Controllers\Department\Services;
 
+
 use EvolutionCMS\Facades\UrlProcessor;
-use EvolutionCMS\Main\Controllers\BaseController;
-use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
+use EvolutionCMS\Main\Controllers\Department\PreviewServiceController;
 use EvolutionCMS\Main\Services\GovPay\Factories\Calculators\FeeCalculatorFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax\SudyTaxSignatureHelper;
-use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Support\StrHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
-class SudytaxPaymentController extends BaseController
+class SudytaxPaymentController extends PreviewServiceController
 {
-    private int $serviceId = 162;
-
-    public function render()
-    {
-
-        $this->serviceId = $this->evo->documentIdentifier;
-
-        try {
-            $serviceProcessor = new ServiceManager();
-            $this->data['serviceId'] = $this->serviceId;
-            $this->data['preview'] = $this->preview(new Request($_GET))['preview'];
-            $this->data['commission'] = $serviceProcessor->getCommission($this->serviceId);
-
-        } catch (ServiceNotFoundException $e) {
-            $this->data['error'] = 'Послуга в розробці';
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function validate(Request $request)
-    {
-        $serviceId = $request->get('service_id');
-
-        $serviceProcessor = new ServiceManager();
-
-        try {
-            $serviceProcessor->validate($serviceId, $request->toArray());
-        } catch (ValidationException $exception) {
-            return [
-                'status' => false,
-                'errors' => $exception->errors()
-            ];
-        }
-
-        return [
-            'status' => true,
-        ];
-    }
-
-    public function preview(Request $request)
-    {
-        $serviceId = $request->get('service_id');
-
-        $formData = $request->toArray();
-
-        $serviceProcessor = new ServiceManager();
-        $data = array_merge($serviceProcessor->getDataForPreview($serviceId, $formData));
-
-        $preview = View::make('partials.services.sudytax_preview')
-            ->with($data)
-            ->with(['service_id' => $serviceId])
-            ->render();
-
-        return [
-            'status' => true,
-            'preview' => $preview,
-        ];
-    }
-
-    public function createServiceOrderAndPay(Request $request)
-    {
-    }
-
-    public function finished()
-    {
-        if (!evo()->getLoginUserID()) {
-            return;
-        }
-
-        $serviceProcessor = new ServiceManager();
-        $serviceProcessor->executePaidServiceOrders();
-        $serviceProcessor->completedServiceOrders();
-    }
+    protected bool $autoCommissions = true;
 
     public function sudytaxRoute(Request $request)
     {
+        $serviceId = 162;
         $requestArr = $request->toArray();
         evo()->logEvent(1, 1, json_encode($requestArr), 'COURT Request ' . $requestArr['NAME'] ?? 'NoName');
         unset($requestArr['q']);
 
 
-        $validator = \Validator::make($requestArr,
+        $validator = Validator::make($requestArr,
             [
                 'AMOUNT' => 'required',
                 'SUM' => 'required',
@@ -140,10 +66,14 @@ class SudytaxPaymentController extends BaseController
             evo()->sendRedirect(UrlProcessor::makeUrl(123, '', '', 'full'));
         }
 
-        $commission = FeeCalculatorFactory::build($this->serviceId)->calculate($requestArr['SUM']);
+        $commission = FeeCalculatorFactory::build($serviceId)->calculate($requestArr['SUM']);
+
+        if($this->autoCommissions){
+            $requestArr['COMMISSION'] = $commission;
+        }
 
         if ($requestArr['COMMISSION'] != $commission) {
-            evo()->logEvent(1, 1, json_encode([
+            evo()->logEvent(1, 3, json_encode([
                 'request' => $request->toArray(),
                 'errors' => [
                     'commission' => $requestArr['COMMISSION'] . '!=' . $commission,
@@ -154,7 +84,7 @@ class SudytaxPaymentController extends BaseController
         }
 
         $newRequest = [
-            'service_id' => $this->serviceId,
+            'service_id' => $serviceId,
 
             'order' => $requestArr['ORDER'],
             'full_name' => StrHelper::namePrepare($requestArr['NAME']),
@@ -171,7 +101,7 @@ class SudytaxPaymentController extends BaseController
             'time' => time(),
         ];
 
-        $validator = \Validator::make($requestArr,
+        $validator = Validator::make($requestArr,
             [
                 'EMAIL' => ['required','email'],
             ]
@@ -181,8 +111,6 @@ class SudytaxPaymentController extends BaseController
             $newRequest['email'] = $requestArr['EMAIL'];
         }
 
-
-        evo()->sendRedirect(UrlProcessor::makeUrl($this->serviceId, '', '', 'full') . '?' . http_build_query($newRequest));
-
+        evo()->sendRedirect(UrlProcessor::makeUrl($serviceId, '', '', 'full') . '?' . http_build_query($newRequest));
     }
 }

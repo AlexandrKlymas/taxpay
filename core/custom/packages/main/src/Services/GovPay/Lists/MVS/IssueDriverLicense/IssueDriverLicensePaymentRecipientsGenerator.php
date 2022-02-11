@@ -20,14 +20,14 @@ class IssueDriverLicensePaymentRecipientsGenerator implements IPaymentRecipients
     /**
      * @var ServiceFieldPriceCalculator
      */
-    private $calculator;
+    private ServiceFieldPriceCalculator $calculator;
 
     public function __construct()
     {
         $this->calculator = new ServiceFieldPriceCalculator();
     }
 
-    private $purposeTemplate = '*;[+regional_service_center_code+];[+service_code+];1;[+tax_number+];*[+full_name+],[+service_title+]';
+    private string $purposeTemplate = '*;[+regional_service_center_code+];[+service_code+];1;[+tax_number+];*[+full_name+],[+service_title+]';
 
     public function getPaymentRecipients($formFieldsValues): array
     {

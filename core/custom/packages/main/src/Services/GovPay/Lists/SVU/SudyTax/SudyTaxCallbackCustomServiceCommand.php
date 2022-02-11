@@ -2,13 +2,15 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax;
 
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusError;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusFailure;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusReady;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusSuccess;
+use Illuminate\Console\Command;
 
-class SudyTaxCallbackCustomServiceCommand extends \Illuminate\Console\Command
+class SudyTaxCallbackCustomServiceCommand extends Command
 {
     protected $signature = 'sudytax:customservice';
 
@@ -48,7 +50,8 @@ class SudyTaxCallbackCustomServiceCommand extends \Illuminate\Console\Command
             ->get()
         ;
 
-        $service = new SudyTaxCallbackService(162);
+        $serviceFactory = ServiceFactory::makeFactoryForService(162);
+        $service = $serviceFactory->getCallbacksService();
 
         echo $serviceOrders->count().PHP_EOL;
         echo 'start'.PHP_EOL;
