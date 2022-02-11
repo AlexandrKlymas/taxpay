@@ -51,4 +51,20 @@ class ECabinetTaxFormConfigurator extends BaseFormConfigurator implements IFormC
 
         return $previewData;
     }
+
+    public function getValidationRules(): array
+    {
+        return [
+            'full_name' => 'required',
+            'bank_edrpou'=>'required',
+            'bank_account'=>'required',
+            'recipient_name'=>'required',
+            'bank_name'=>'required',
+            'mfo'=>'required',
+            'budgetcode'=>'required',
+            'payercode'=>'required',
+            'purpose'=>'required',
+            'sum'=>'required',
+        ];
+    }
 }

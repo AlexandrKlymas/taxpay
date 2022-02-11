@@ -24,11 +24,6 @@ class FinesByActFactory extends BaseServiceFactory implements IServiceFactory,IA
         return $this->container->make(FinesByActRecipientsGenerator::class,$this->dependencies);
     }
 
-    public function getPaymentCalculator(): IPaymentCalculator
-    {
-        return $this->container->make(FinesByActPaymentCalculator::class,$this->dependencies);
-    }
-
     public function getExecutor(): IExecutor
     {
         return $this->container->make(FinesByActExecutor::class,$this->dependencies);

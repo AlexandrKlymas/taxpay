@@ -38,14 +38,14 @@ function updateTotalPrice() {
     if (price > 0) {
 
 
-        if (totalCommissionConfig.fix_summ != "0.00") {
+        if (totalCommissionConfig.fix_summ !== "0.00") {
             commission = parseFloat(totalCommissionConfig.fix_summ);
-        } else if (totalCommissionConfig.percent != "0") {
+        } else if (totalCommissionConfig.percent !== "0") {
             commission = price * parseFloat(totalCommissionConfig.percent) / 100;
-            if (totalCommissionConfig.min_summ != "0.00" && parseFloat(totalCommissionConfig.min_summ) > commission) {
+            if (totalCommissionConfig.min_summ !== "0.00" && parseFloat(totalCommissionConfig.min_summ) > commission) {
                 commission = parseFloat(totalCommissionConfig.min_summ);
             }
-            if (totalCommissionConfig.max_summ != "0.00" && parseFloat(totalCommissionConfig.max_summ) < commission) {
+            if (totalCommissionConfig.max_summ !== "0.00" && parseFloat(totalCommissionConfig.max_summ) < commission) {
                 commission = parseFloat(totalCommissionConfig.max_summ);
             }
         }

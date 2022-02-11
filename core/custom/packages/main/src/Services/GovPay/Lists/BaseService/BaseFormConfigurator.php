@@ -3,13 +3,11 @@ namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IField;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 
-abstract class BaseFormConfigurator
+abstract class BaseFormConfigurator implements IFormConfigurator
 {
-
-    protected $serviceConfig = [];
-
-
+    protected array $serviceConfig = [];
 
     public function __construct(array $serviceConfig)
     {
@@ -22,7 +20,7 @@ abstract class BaseFormConfigurator
      */
     abstract public function getFormConfig(): array;
 
-    public function renderFormFields($formConfig = []): array
+    public function renderFormFields(array $formConfig = []): array
     {
         $renderedFields = [];
         foreach ($this->getFormConfig() as $field) {
@@ -31,8 +29,6 @@ abstract class BaseFormConfigurator
 
         return $renderedFields;
     }
-
-
 
     public function getValidationRules():array
     {
@@ -43,7 +39,6 @@ abstract class BaseFormConfigurator
         return $rules;
     }
 
-
     public function getFormFieldsValues($formData):array
     {
         $formDataForSave = [];
@@ -52,6 +47,4 @@ abstract class BaseFormConfigurator
         }
         return $formDataForSave;
     }
-
-
 }

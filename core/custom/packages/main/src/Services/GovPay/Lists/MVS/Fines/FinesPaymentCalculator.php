@@ -2,28 +2,15 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\Fines;
 
 
-use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPaymentCalculator;
 use EvolutionCMS\Main\Services\FinesSearcher\Models\Fine;
+use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BasePaymentCalculator;
 
-class FinesPaymentCalculator implements IPaymentCalculator
+class FinesPaymentCalculator extends BasePaymentCalculator
 {
-
-    private $serviceId;
-    /**
-     * @var SumCalculator
-     */
-    private $sumCalculator;
-
-    public function __construct(SumCalculator $sumCalculator)
-    {
-        $this->sumCalculator = $sumCalculator;
-    }
-
-    public function calculate(array $fieldValues)
+    public function calculate(array $fieldValues):float
     {
         $fine = Fine::findOrFail($fieldValues['fine_id']);
 
-        return $fine->data['sumPenalty'];
+        return floatval($fine->data['sumPenalty']);
     }
 }

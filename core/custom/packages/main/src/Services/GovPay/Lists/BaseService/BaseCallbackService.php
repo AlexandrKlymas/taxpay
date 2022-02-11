@@ -2,19 +2,27 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 
+use EvolutionCMS\Main\Controllers\Department\ServiceOrderSuccessController;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
+use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
+use Illuminate\Http\Request;
+use PHPMailer\PHPMailer\Exception;
 
 class BaseCallbackService implements ICallbackService
 {
     protected array $errors = [];
     protected string $errorsTitle = ' CallBackService';
-    protected int $serviceId=0;
+    protected int $serviceId;
+    protected string $serviceName = '';
+    protected IServiceFactory $serviceFactory;
 
-    public function __construct(int $serviceId, string $serviceName = '')
+    public function __construct(IServiceFactory $serviceFactory)
     {
-        $this->serviceId = $serviceId;
-        $this->errorsTitle = strtoupper($serviceName) . $this->errorsTitle;
+        $this->serviceFactory = $serviceFactory;
+        $this->serviceId = $this->serviceFactory->getServiceId();
+        $this->errorsTitle = strtoupper($this->serviceName) . $this->errorsTitle;
 
     }
 
@@ -28,35 +36,56 @@ class BaseCallbackService implements ICallbackService
         //
     }
 
+    /**
+     * @throws Exception
+     */
     public function invoicePDFGenerated(array $params)
     {
-        //
+        if($this->isValidServiceOrder($params['service_order'])){
+
+            $serviceOrder = $params['service_order'];
+
+            $this->sendInvoiceToEmail($serviceOrder);
+        }
+        if(!empty($this->errors)){
+            $this->logErrors($this->errorsTitle,$params);
+        }
     }
 
-    protected function setError($key,$error,$data=[])
+    protected function sendInvoiceToEmail(ServiceOrder $serviceOrder)
     {
-        if(!empty($data)){
+        if(!empty($serviceOrder->email)){
+            ServiceOrderSuccessController::sendInvoiceToEmail(new Request([
+                'email'=>$serviceOrder->email,
+                'order_hash'=>$serviceOrder->order_hash,
+            ]));
+        }
+    }
+
+    protected function setError($key, $error, $data = [])
+    {
+        if (!empty($data)) {
             $this->errors[$key][] = [
-                'error'=>$error,
-                'data'=>$data,
+                'error' => $error,
+                'data' => $data,
             ];
-        }else{
+        } else {
             $this->errors[$key][] = $error;
         }
     }
 
     protected function isValidLiqPayErrorCallbackRequest(array $params): bool
     {
-        if(!empty($params['status']) && $params['status']=='success'){
+        if (!empty($params['status']) && $params['status'] == 'success') {
             return false;
         }
-        if(empty($params['request'])){
-            $this->setError('request','empty request');
+        if (empty($params['request'])) {
+            $this->setError('request', 'empty request');
 
             return false;
         }
-        if(empty($params['request']['order_id'])){
-            $this->setError('request','empty payment_hash');
+        if (empty($params['request']['order_id'])) {
+            $this->setError('request', 'empty payment_hash');
 
             return false;
         }
@@ -65,12 +94,12 @@ class BaseCallbackService implements ICallbackService
 
     protected function isValidServiceOrder($serviceOrder = null): bool
     {
-        if(empty($serviceOrder)){
-            $this->setError('service_order','service order not found');
+        if (empty($serviceOrder)) {
+            $this->setError('service_order', 'service order not found');
 
             return false;
         }
-        if(empty($serviceOrder->service_id) || $serviceOrder->service_id != $this->serviceId){
+        if (empty($serviceOrder->service_id) || $serviceOrder->service_id != $this->serviceId) {
 
             return false;
         }
@@ -78,14 +107,17 @@ class BaseCallbackService implements ICallbackService
         return true;
     }
 
-    protected function logErrors(string $title = '', array $data=[])
+    /**
+     * @throws Exception
+     */
+    protected function logErrors(string $title = '', array $data = [])
     {
-        if(empty($title)){
+        if (empty($title)) {
             $title = $this->errorsTitle;
         }
-        evo()->logEvent(1,3,json_encode([
-            'errors'=>$this->errors,
-            'data'=>$data,
-        ]),$title);
+        evo()->logEvent(1, 3, json_encode([
+            'errors' => $this->errors,
+            'data' => $data,
+        ]), $title);
     }
 }

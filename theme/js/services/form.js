@@ -105,6 +105,11 @@ $(document).on('click', '#create-order-and-pay', function () {
     formData.push({
         name: 'payment_method',
         value: $('[name="payment_method"]:checked').val()
+    });
+
+    formData.push({
+        name: 'nocache',
+        value: $('[name="nocache"]').val()
     })
 
     createServiceOrderAndPay(formData)

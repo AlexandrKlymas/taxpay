@@ -4,15 +4,12 @@ namespace EvolutionCMS\Main\Controllers\Department;
 
 use EvolutionCMS\Facades\UrlProcessor;
 use EvolutionCMS\Main\Controllers\BaseController;
-use EvolutionCMS\Main\Controllers\LiqPayController;
 use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
-use EvolutionCMS\Main\Services\GovPay\Lists\ServicesAlias;
 use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
-use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\LiqPay\LiqPayService;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use Illuminate\Validation\ValidationException;
+
 
 class ServiceController extends BaseController
 {
@@ -27,75 +24,35 @@ class ServiceController extends BaseController
             $this->data['commission'] = $serviceProcessor->getCommission($serviceId);
         } catch (ServiceNotFoundException $e) {
             $this->data['error'] = 'Послуга в розробці';
-        } catch (\Exception $e) {
-            throw $e;
         }
     }
 
-    public function validate(Request $request)
+    public function validate(Request $request): array
     {
         $serviceId = $request->get('service_id');
 
         $serviceProcessor = new ServiceManager();
 
-        try {
-            $serviceProcessor->validate($serviceId, $request->toArray());
-        } catch (ValidationException $exception) {
-            return [
-                'status' => false,
-                'errors' => $exception->errors()
-            ];
-        }
+        $serviceProcessor->validate($serviceId, $request->toArray());
 
         return [
             'status' => true,
         ];
     }
 
-    public function preview(Request $request)
+    public function preview(Request $request): array
     {
         $serviceId= $request->get('service_id');
+        $formData = $request->toArray();
 
-        $servicesAlias = new ServicesAlias();
-
-        try{
-            $serviceConfig = $servicesAlias->getService($serviceId);
-            if(empty($serviceConfig['preview'])){
-                throw new ServiceNotFoundException('empty previewGenerator');
-            }
-        }catch (ServiceNotFoundException $e){
-
-            $formData = $request->toArray();
-
-            $serviceProcessor = new ServiceManager();
-            $data = array_merge($serviceProcessor->getDataForPreview($serviceId, $formData));
-            $preview = View::make('partials.services.preview')->with($data)->render();
-
-            return [
-                'status' => true,
-                'preview' => $preview,
-            ];
-        }
-
-//        $formData = $request->toArray();
-//
-//        $serviceProcessor = new ServiceManager();
-//        $data = array_merge($serviceProcessor->getDataForPreview($serviceId, $formData));
-//        $preview = View::make('partials.services.preview')->with($data)->render();
-//
-//        return [
-//            'status' => true,
-//            'preview' => $preview,
-//        ];
-
-        $previewGenerator = new $serviceConfig['preview'];
-
-        return $previewGenerator->preview($request);
+        return [
+            'status' => true,
+            'preview' => (new ServiceManager())->renderPreview($serviceId,$formData),
+        ];
     }
 
-    public function createServiceOrderAndPay(Request $request)
+    public function createServiceOrderAndPay(Request $request): array
     {
-
         $serviceId = $request->get('service_id');
         $formData = $request->toArray();
 
@@ -107,10 +64,9 @@ class ServiceController extends BaseController
         switch ($request->get('payment_method')) {
             case 'apay':
                 try{
-                    $liqPayController = new LiqPayController($serviceOrder->service_id);
-                    $liqPayService = $liqPayController->getLiqPayService();
+                    $liqPayService = new LiqPayService();
                     $paymentForm = $liqPayService->payOrder($serviceOrder);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     evo()->logEvent('1',2,'LiqPay Request: <pre>'.print_r($_GET,true).'</pre>',
                         'ServiceController cannot create LiqPayController');
                 }
@@ -132,10 +88,7 @@ class ServiceController extends BaseController
                 break;
         }
 
-
         return $response;
-
-
     }
 
     public function finished(){

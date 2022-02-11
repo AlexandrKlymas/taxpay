@@ -3,53 +3,44 @@
 namespace EvolutionCMS\Main\Services\LiqPay;
 
 
-use Carbon\Carbon;
+use EvolutionCMS\Main\Services\GovPay\Dto\MerchantKeysDto;
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
-use http\Exception\InvalidArgumentException;
 use Illuminate\Http\Request;
+use LiqPay;
+use PHPMailer\PHPMailer\Exception;
 
 class LiqPayService
 {
-
-    private $sandBoxMode;
     /**
-     * @var \LiqPay
+     * @var LiqPay
      */
-    private $liqay;
-    /**
-     * @var \DocumentParser
-     */
-    private $evo;
-    private $publicKey;
+    private LiqPay $liqPay;
 
-    private $privateKey;
+    private bool $debugMode = true;
 
-    public function __construct($publicKey, $privateKey, $sandBoxMode = 0)
+    private MerchantKeysDto $merchantKeysDto;
+
+    protected function initLiqPaySDK(int $serviceId)
     {
-        $this->evo = \EvolutionCMS();
+        $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
 
-        if (empty($publicKey) || empty($privateKey)) {
-            throw new InvalidArgumentException('publicKey or private key is empty');
-        }
+        $this->merchantKeysDto = $serviceFactory->getMerchantManager()->getKeys();
 
-        $this->publicKey = $publicKey;
-        $this->privateKey = $privateKey;
-
-
-        $this->sandBoxMode = $sandBoxMode;
-
-        $this->liqay = new \LiqPay($this->publicKey, $this->privateKey);
-
+        $this->liqPay = new LiqPay($this->merchantKeysDto->getPublicKey(), $this->merchantKeysDto->getPrivateKey());
     }
 
-    public function getPaymentDataAndSignature(ServiceOrder $serviceOrder)
+    public function getPaymentDataAndSignature(ServiceOrder $serviceOrder): array
     {
+        $this->initLiqPaySDK($serviceOrder->service_id);
+
         $formParams = $this->getFormParams($serviceOrder);
 
         $data = base64_encode(json_encode($formParams));
-        $signature = $this->liqay->cnb_signature($formParams);
+
+        $signature = $this->liqPay->cnb_signature($formParams);
 
         return [
             'data' => $data,
@@ -57,18 +48,21 @@ class LiqPayService
         ];
     }
 
-    public function payOrder(ServiceOrder $serviceOrder)
+    public function payOrder(ServiceOrder $serviceOrder): string
     {
+        $this->initLiqPaySDK($serviceOrder->service_id);
+
         $formFields = $this->getFormParams($serviceOrder);
 
-        $form = $this->liqay->cnb_form($formFields);
+        $form = $this->liqPay->cnb_form($formFields);
+
         return $form;
 
     }
 
-    private function getFormParams(ServiceOrder $serviceOrder)
+    private function getFormParams(ServiceOrder $serviceOrder): array
     {
-
+        $this->initLiqPaySDK($serviceOrder->service_id);
 
 
         /** @var PaymentRecipient $mainRecipient */
@@ -76,7 +70,7 @@ class LiqPayService
 
 
         return [
-            'public_key' => $this->publicKey,
+            'public_key' => $this->merchantKeysDto->getPublicKey(),
             'version' => 3,
 
             'action' => 'pay',
@@ -90,12 +84,16 @@ class LiqPayService
             'language' => 'uk',
             'paytypes' => 'apay,gpay,card,liqpay,privat24,masterpass,qr',
 
-            'result_url' => $this->evo->getConfig('site_url') . 'liqpay-result',
-            'server_url' => $this->evo->getConfig('site_url') . 'liqpay-server-request',
+            'result_url' => evo()->getConfig('site_url') . 'liqpay-result',
+            'server_url' => evo()->getConfig('site_url') . 'liqpay-server-request',
 
         ];
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     public function handle(Request $request)
     {
         $request = $request->toArray();
@@ -104,14 +102,8 @@ class LiqPayService
 
         $log['decode_data'] = isset($request['data']) ? json_decode(base64_decode($request['data']), true):'empty-data';
 
-
-        evo()->logEvent('412',1,json_encode($log),'LiqPay handle');
-
-
-        $sign = base64_encode(sha1($this->privateKey . $request['data'] . $this->privateKey, 1));
-
-        if ($sign !== $request['signature']) {
-            throw new \Exception('bad signature');
+        if($this->debugMode){
+            evo()->logEvent('412',1,json_encode($log),'LiqPay handle');
         }
 
         $data = json_decode(base64_decode($request['data']), true);
@@ -129,6 +121,15 @@ class LiqPayService
 
         if ($serviceOrder->total !== $data['amount']) {
             throw new \Exception('Amount did not match');
+        }
+
+        $this->initLiqPaySDK($serviceOrder->service_id);
+
+        $sign = base64_encode(sha1($this->merchantKeysDto->getPrivateKey()
+            . $request['data'] . $this->merchantKeysDto->getPrivateKey(), 1));
+
+        if ($sign !== $request['signature']) {
+            throw new \Exception('bad signature');
         }
 
         $serviceManager = new ServiceManager();

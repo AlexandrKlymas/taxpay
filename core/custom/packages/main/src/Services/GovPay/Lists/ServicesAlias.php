@@ -4,15 +4,12 @@ namespace EvolutionCMS\Main\Services\GovPay\Lists;
 
 
 use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
-use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRCallbackService;
 use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRFactory;
-use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRLiqPayKeys;
-use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRPreviewGenerator;
-use EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax\ECabinetTaxCallbackService;
-use EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax\ECabinetTaxFormFactory;
+use EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax\ECabinetTaxFactory;
+use EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage\MarriageFactory;
+use EvolutionCMS\Main\Services\GovPay\Lists\DVS\VVPay\VVPayFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\MVS\WeightFinesByAct\WeightFinesByActFactory;
-use EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax\SudyTaxCallbackService;
-use EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax\SudyTaxFormFactory;
+use EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax\SudyTaxFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\MVS\Fines\FinesFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\MVS\FinesByAct\FinesByActFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\MVS\InstallationServicesPoliceProtection\InstallationServicesPoliceProtectionFactory;
@@ -26,7 +23,7 @@ class ServicesAlias
     /**
      * @var string[][]
      */
-    protected $serviceIdMap =  [
+    protected array $serviceIdMap =  [
         26 => [
             'factory'=>PoliceProtectionFactory::class,
             'alias'=>'police_protection'
@@ -56,14 +53,12 @@ class ServicesAlias
             'alias'=>'park_fines_by_act'
         ],
         165 => [
-            'factory'=> ECabinetTaxFormFactory::class,
+            'factory'=> ECabinetTaxFactory::class,
             'alias'=>'e_cabinet_tax',
-            'callback_service'=>ECabinetTaxCallbackService::class,
         ],
         162 => [
-            'factory'=> SudyTaxFormFactory::class,
+            'factory'=> SudyTaxFactory::class,
             'alias'=>'sudy_tax',
-            'callback_service'=>SudyTaxCallbackService::class,
         ],
         160 => [
             'factory'=> WeightFinesByActFactory::class,
@@ -72,15 +67,19 @@ class ServicesAlias
         170 => [
             'factory'=> PCRFactory::class,
             'alias'=>'pcr',
-            'liqpay_keys'=>PCRLiqPayKeys::class,
-            'callback_service'=>PCRCallbackService::class,
-            'preview'=>PCRPreviewGenerator::class
         ],
-
-
+        176 => [
+            'alias'=>'marriage',
+            'factory'=> MarriageFactory::class,
+        ],
+        173 => [
+            'factory'=> VVPayFactory::class,
+            'alias'=>'vvpay'
+        ],
     ];
-    public function getService($serviceId){
 
+    public function getService(int $serviceId): array
+    {
         if(!array_key_exists($serviceId,$this->serviceIdMap)){
             throw new ServiceNotFoundException('Service not found');
         }
@@ -88,17 +87,13 @@ class ServicesAlias
 
     }
 
-    public function getServiceAlias($serviceId){
+    public function getServiceAlias(int $serviceId): string
+    {
         return $this->getService($serviceId)['alias'];
     }
 
-
-    public function getServiceFactory($serviceId){
-        return $this->getService($serviceId)['factory'];
-    }
-
-    public function getAllServices(): array
+    public function getServiceFactory(int $serviceId): string
     {
-        return $this->serviceIdMap;
+        return $this->getService($serviceId)['factory'];
     }
 }

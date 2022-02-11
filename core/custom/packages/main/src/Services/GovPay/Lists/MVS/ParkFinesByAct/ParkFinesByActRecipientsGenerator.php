@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\ParkFinesByAct;
 
 
@@ -10,7 +9,6 @@ use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\ParkPencodeItem;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
-use EvolutionCMS\Main\Services\GovPay\Models\PencodesItem;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
 class ParkFinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
@@ -19,7 +17,7 @@ class ParkFinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
     /**
      * @var SumCalculator
      */
-    private $sumCalculator;
+    private SumCalculator $sumCalculator;
 
 
 
@@ -40,7 +38,8 @@ class ParkFinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
 
         $purpose = PurposeHelpers::parse($purposeTemplate,array_merge($formFieldsValues));
 
-        $mainPaymentRecipientDto = new PaymentRecipientDto($region->okpo,$region->iban,$mfo,$this->sumCalculator->calculate($formFieldsValues));
+        $mainPaymentRecipientDto = new PaymentRecipientDto(
+            $region->okpo,$region->iban,$mfo,$this->sumCalculator->calculate($formFieldsValues));
         $mainPaymentRecipientDto->setRecipientName($region->description);
         $mainPaymentRecipientDto->setRecipientType(PaymentRecipient::RECIPIENT_TYPE_MAIN);
         $mainPaymentRecipientDto->setPurpose($purpose);

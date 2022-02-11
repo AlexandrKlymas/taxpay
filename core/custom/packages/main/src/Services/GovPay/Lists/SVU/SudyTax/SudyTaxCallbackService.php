@@ -2,26 +2,28 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax;
 
-use EvolutionCMS\Main\Controllers\Department\ServiceOrderSuccessController;
+
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseCallbackService;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusError;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusFailure;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusReady;
-use Illuminate\Http\Request;
+use PHPMailer\PHPMailer\Exception;
 
 class SudyTaxCallbackService extends BaseCallbackService
 {
-    protected int $serviceId=162;
-
     private CourtGovUaAPI $api;
 
-    public function __construct(int $serviceId, string $serviceName = '')
+    public function __construct(IServiceFactory $serviceFactory)
     {
-        parent::__construct($serviceId, $serviceName);
+        parent::__construct($serviceFactory);
         $this->api = new CourtGovUaAPI();
     }
 
+    /**
+     * @throws Exception
+     */
     public function liqPayCallback(array $params)
     {
         if($this->isValidLiqPayErrorCallbackRequest($params)){
@@ -43,10 +45,9 @@ class SudyTaxCallbackService extends BaseCallbackService
 
             $this->sendInvoiceToEmail($serviceOrder);
             $this->sendCourtSuccessCallBack($serviceOrder);
-
-            if(!empty($this->errors)){
-                $this->logErrors('checkFoundCallback',$params);
-            }
+        }
+        if(!empty($this->errors)){
+            $this->logErrors('invoicePDFGenerated Callback',$params);
         }
     }
 
@@ -108,16 +109,6 @@ class SudyTaxCallbackService extends BaseCallbackService
         $serviceOrder->save();
     }
 
-    private function sendInvoiceToEmail(ServiceOrder $serviceOrder)
-    {
-        if(!empty($serviceOrder->email)){
-            ServiceOrderSuccessController::sendInvoiceToEmail(new Request([
-                'email'=>$serviceOrder->email,
-                'order_hash'=>$serviceOrder->order_hash,
-            ]));
-        }
-    }
-
     public function sendCourtSuccessCallBack(ServiceOrder $serviceOrder)
     {
         if(!$serviceOrder->hasInServiceData('court_callback')){
@@ -134,7 +125,7 @@ class SudyTaxCallbackService extends BaseCallbackService
 
     public function checkUnsentCallbacks(): array
     {
-        $service_id = 162;
+        $service_id = $this->serviceId;
         $dateFrom = date('Y-m-d H:i:s',strtotime('-1 day'));
         $dateTo = date('Y-m-d H:i:s',time());
         $statuses = [

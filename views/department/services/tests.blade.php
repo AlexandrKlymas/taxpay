@@ -1,6 +1,5 @@
 <a href="/paymentstests/?s=sudy">Sudy</a>
 <a href="/paymentstests/?s=gfs">GFS</a>
-<a href="/paymentstests/?s=sudyback">sudyCallbacks</a>
 <form action="{{$source}}" method="{{$method}}">
     @foreach($fields as $field=>$value)
         <label for="{{$field}}">{{$field}}

@@ -2,64 +2,36 @@
 namespace EvolutionCMS\Main\Controllers;
 
 
+use DocumentParser;
 use EvolutionCMS\Facades\UrlProcessor;
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
-use EvolutionCMS\Main\Services\GovPay\Support\MerchantHelper;
 use EvolutionCMS\Main\Services\LiqPay\LiqPayService;
 use Exception;
 use Illuminate\Http\Request;
+use function EvolutionCMS;
 
 class LiqPayController
 {
-
-    private $publicKey;
-    private $privateKey;
-    /**
-     * @var int
-     */
-    private $sandBoxMode;
-    /**
-     * @var \DocumentParser
-     */
-    private $evo;
     /**
      * @var LiqPayService
      */
-    private $liqPayService;
+    private LiqPayService $liqPayService;
+    private DocumentParser $evo;
 
     /**
      * @throws Exception
      */
-    public function __construct(int $serviceId=null)
+    public function __construct()
     {
-        $this->evo = \EvolutionCMS();
+        $this->evo = EvolutionCMS();
         $this->evo->getDatabase()->connect();
-
-        $this->initLiqPayService($serviceId);
+        $this->liqPayService = new LiqPayService();
     }
 
-    public function initLiqPayService(int $serviceId=null)
-    {
-        $merchantHelper = new MerchantHelper();
-
-        try{
-            $liqPayKeys = $merchantHelper->getKeysByServiceId($serviceId);
-        }catch (Exception $e){
-            $liqPayKeys = $merchantHelper->getDefaultKeys();
-        }
-
-        $this->sandBoxMode = $liqPayKeys->getSandBaxKey();
-        $this->publicKey = $liqPayKeys->getPublicKey();
-        $this->privateKey = $liqPayKeys->getPrivateKey();
-
-        $this->liqPayService = new LiqPayService($this->publicKey,$this->privateKey,$this->sandBoxMode);
-    }
-
-    public function getLiqPayService(): LiqPayService
-    {
-        return $this->liqPayService;
-    }
-
+    /**
+     * @throws Exception
+     */
     private function parseHandleRequest(Request $request)
     {
         if(!empty($request['data'])){
@@ -79,16 +51,18 @@ class LiqPayController
         }
     }
 
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function serverHandle(Request $request)
     {
         try{
             $serviceOrder = $this->parseHandleRequest($request);
         } catch (Exception $e) {
-            evo()->logEvent('1',3,''.PHP_EOL.json_encode($request->toArray()),
+            evo()->logEvent(1,3,''.PHP_EOL.json_encode($request->toArray()),
                 'LiqPay ServerHandle '.$e->getMessage());
             die();
         }
-        $this->initLiqPayService($serviceOrder->service_id);
 
         sleep(1); //TODO need queue for email sender (invoice email doubling)
 
@@ -99,8 +73,6 @@ class LiqPayController
     {
         try {
             $serviceOrder = $this->parseHandleRequest($request);
-
-            $this->initLiqPayService($serviceOrder->service_id);
 
             $paymentStatus = $this->liqPayService->handle($request);
 
@@ -119,10 +91,13 @@ class LiqPayController
 
             $redirect = UrlProcessor::makeUrl(124);
 
-            evo()->invokeEvent('OnLiqPayCallback', [
-                'request'=>$request->toArray(),
-                'status'=>$paymentStatus??'empty status',
-            ]);
+            if(!empty($serviceOrder)){
+                $serviceFactory = ServiceFactory::makeFactoryForService($serviceOrder->service_id);
+                $serviceFactory->getCallbacksService()->liqPayCallback([
+                    'request'=>$request->toArray(),
+                    'status'=>$paymentStatus??'empty status',
+                ]);
+            }
 
             if($request->get('controllerResponseType') !== 'json'){
                 evo()->sendRedirect($redirect);
@@ -134,7 +109,8 @@ class LiqPayController
             ];
         }
 
-        evo()->invokeEvent('OnLiqPayCallback', [
+        $serviceFactory = ServiceFactory::makeFactoryForService($serviceOrder->service_id);
+        $serviceFactory->getCallbacksService()->liqPayCallback([
             'request'=>$request->toArray(),
             'status'=>$paymentStatus,
         ]);

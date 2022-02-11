@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\FinesByAct;
 
 
@@ -18,11 +17,7 @@ class FinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
     /**
      * @var SumCalculator
      */
-    private $sumCalculator;
-
-
-
-
+    private SumCalculator $sumCalculator;
 
     public function __construct(SumCalculator $sumCalculator)
     {

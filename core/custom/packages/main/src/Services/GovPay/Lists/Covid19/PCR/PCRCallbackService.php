@@ -6,12 +6,13 @@ namespace EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseCallbackService;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\TelegramBot\TelegramBotPlr;
-
+use PHPMailer\PHPMailer\Exception;
 
 class PCRCallbackService extends BaseCallbackService
 {
-    protected int $serviceId=170;
-
+    /**
+     * @throws Exception
+     */
     public function liqPayCallback(array $params)
     {
         if($this->isValidLiqPayErrorCallbackRequest($params)){
@@ -51,6 +52,7 @@ class PCRCallbackService extends BaseCallbackService
 
     public function invoicePDFGenerated(array $params)
     {
+        evo()->logEvent(1,3,'','++++++++++invoicePDFGenerated');
         if($this->isValidServiceOrder($params['service_order'])){
             $serviceOrder = $params['service_order'];
 

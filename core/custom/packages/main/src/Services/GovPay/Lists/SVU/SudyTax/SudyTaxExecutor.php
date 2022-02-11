@@ -9,14 +9,12 @@ use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 class SudyTaxExecutor implements IExecutor
 {
 
-    /**
-     */
     public function execute(ServiceOrder $serviceOrder)
     {
         $serviceOrder->updateServiceData('paid',true);
     }
 
-    public function isCompleted(ServiceOrder $serviceOrder)
+    public function isCompleted(ServiceOrder $serviceOrder): bool
     {
         return !empty($serviceOrder->service_data['paid']);
     }

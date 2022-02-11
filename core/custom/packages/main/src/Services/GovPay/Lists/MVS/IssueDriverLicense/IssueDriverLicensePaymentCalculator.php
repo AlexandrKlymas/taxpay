@@ -13,14 +13,14 @@ class IssueDriverLicensePaymentCalculator implements IPaymentCalculator
     /**
      * @var ServiceFieldPriceCalculator
      */
-    private $serviceFieldPriceCalculator;
+    private ServiceFieldPriceCalculator $serviceFieldPriceCalculator;
 
     public function __construct()
     {
         $this->serviceFieldPriceCalculator = new ServiceFieldPriceCalculator();
     }
 
-    public function calculate(array $fieldValues)
+    public function calculate(array $fieldValues): float
     {
         return $this->serviceFieldPriceCalculator->calculate($fieldValues);
     }

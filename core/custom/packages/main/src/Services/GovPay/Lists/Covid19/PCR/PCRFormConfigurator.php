@@ -1,28 +1,17 @@
 <?php
+
 namespace EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR;
 
 
 use EvolutionCMS\Main\Models\MedicalCenter;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
-use EvolutionCMS\Main\Services\GovPay\Fields\Base\DisabledTextField;
-use EvolutionCMS\Main\Services\GovPay\Fields\Base\SumField;
-use EvolutionCMS\Main\Services\GovPay\Fields\Base\TextField;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\TotalCaptionField;
-use EvolutionCMS\Main\Services\GovPay\Fields\FineSeries;
 use EvolutionCMS\Main\Services\GovPay\Fields\FullNameField;
 use EvolutionCMS\Main\Services\GovPay\Fields\HiddenStaticSumField;
 use EvolutionCMS\Main\Services\GovPay\Fields\HiddenTextField;
 use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
-use EvolutionCMS\Main\Services\GovPay\Fields\MedicalCenterField;
-use EvolutionCMS\Main\Services\GovPay\Fields\NameField;
-use EvolutionCMS\Main\Services\GovPay\Fields\PatronymicField;
-use EvolutionCMS\Main\Services\GovPay\Fields\SeparatorField;
-use EvolutionCMS\Main\Services\GovPay\Fields\StaticSumField;
-use EvolutionCMS\Main\Services\GovPay\Fields\SurnameField;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
 
-
-class PCRFormConfigurator extends BaseFormConfigurator implements IFormConfigurator
+class PCRFormConfigurator extends BaseFormConfigurator
 {
 
     public function getFormConfig(): array
