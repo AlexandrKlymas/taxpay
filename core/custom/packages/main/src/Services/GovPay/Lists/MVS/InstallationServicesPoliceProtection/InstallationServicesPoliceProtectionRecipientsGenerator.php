@@ -1,31 +1,27 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\InstallationServicesPoliceProtection;
 
-
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\MontcodeItem;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
-class InstallationServicesPoliceProtectionPaymentRecipientsGenerator implements IPaymentRecipientsGenerator
+class InstallationServicesPoliceProtectionRecipientsGenerator implements IRecipientsGenerator
 {
-
     /**
-     * @var \EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator
+     * @var SumCalculator
      */
-    private $sumCalculator;
+    private SumCalculator $sumCalculator;
 
     public function __construct()
     {
-        $this->sumCalculator = new \EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator();
+        $this->sumCalculator = new SumCalculator();
     }
 
-    private $purposeTemplate = '[+contract_number+], [+contract_date+], [+full_name+], [+company+]';
-
-
+    private string $purposeTemplate = '[+contract_number+], [+contract_date+], [+full_name+], [+company+]';
 
     public function getPaymentRecipients($formFieldsValues): array
     {
@@ -35,7 +31,6 @@ class InstallationServicesPoliceProtectionPaymentRecipientsGenerator implements 
         $recipientData = MontcodeItem::where('name_ua',$region)->firstOrFail();
 
         $amount = $this->sumCalculator->calculate($formFieldsValues);
-
 
         $mainPaymentRecipientDto = new PaymentRecipientDto(
             $recipientData->okpo,

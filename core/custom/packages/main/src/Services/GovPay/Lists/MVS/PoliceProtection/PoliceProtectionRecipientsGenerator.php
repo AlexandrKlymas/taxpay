@@ -1,10 +1,9 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\PoliceProtection;
 
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Support\FieldHelpers;
@@ -12,7 +11,7 @@ use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\PoliceProtectionCode;
 
-class PoliceProtectionPaymentRecipientsGenerator implements IPaymentRecipientsGenerator
+class PoliceProtectionRecipientsGenerator implements IRecipientsGenerator
 {
 
     private SumCalculator $sumCalculator;

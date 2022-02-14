@@ -2,24 +2,21 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\ParkFinesByAct;
 
-
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\ParkPencodeItem;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
-class ParkFinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
+class ParkFinesByActRecipientsGenerator implements IRecipientsGenerator
 {
 
     /**
      * @var SumCalculator
      */
     private SumCalculator $sumCalculator;
-
-
 
     public function __construct(SumCalculator $sumCalculator)
     {
@@ -46,7 +43,6 @@ class ParkFinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
         if($bank){
             $mainPaymentRecipientDto->setRecipientBankName($bank->name);
         }
-
 
         return [
             $mainPaymentRecipientDto

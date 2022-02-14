@@ -3,14 +3,14 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DVS\VVPay;
 
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\VVPayDetails;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
-class VVPayRecipientsGenerator implements IPaymentRecipientsGenerator
+class VVPayRecipientsGenerator implements IRecipientsGenerator
 {
 
     /**

@@ -2,18 +2,16 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\FinesByAct;
 
-
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\PencodesItem;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
-class FinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
+class FinesByActRecipientsGenerator implements IRecipientsGenerator
 {
-
     /**
      * @var SumCalculator
      */
@@ -32,9 +30,6 @@ class FinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
 
         $photoFixation = in_array(mb_strtoupper($series,'utf-8'),['1AB','1АВ']);
 
-
-
-
         if($photoFixation === true){
             $photoFixationRegionId = !empty(evo()->getConfig('g_fine_photo_fixation_recipient_id'))?evo()->getConfig('g_fine_photo_fixation_recipient_id'):1;
             $region = PencodesItem::where('id',$photoFixationRegionId)->firstOrFail();
@@ -44,8 +39,6 @@ class FinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
             $region = PencodesItem::findOrFail($regionId);
             $purposeTemplate = '*;21081300;[+fine_series+];[+fine_number+];*[+full_name+];';
         }
-
-
 
         $mfo = $region->mfo ?? '';
         $bank = Bank::whereMfo($region->mfo)->first();
@@ -59,7 +52,6 @@ class FinesByActRecipientsGenerator implements IPaymentRecipientsGenerator
         if($bank){
             $mainPaymentRecipientDto->setRecipientBankName($bank->name);
         }
-
 
         return [
             $mainPaymentRecipientDto
