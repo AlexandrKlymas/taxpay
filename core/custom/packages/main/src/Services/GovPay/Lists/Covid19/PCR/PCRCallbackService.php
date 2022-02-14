@@ -2,7 +2,6 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR;
 
-
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseCallbackService;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\TelegramBot\TelegramBotPlr;
@@ -52,16 +51,12 @@ class PCRCallbackService extends BaseCallbackService
 
     public function invoicePDFGenerated(array $params)
     {
-        evo()->logEvent(1,3,'','++++++++++invoicePDFGenerated');
         if($this->isValidServiceOrder($params['service_order'])){
             $serviceOrder = $params['service_order'];
-
             $this->sendSuccessTelegramNotify($serviceOrder);
         }
         if(!empty($this->errors)){
             $this->logErrors('PCR BOT Errors Invoice',$params);
         }
     }
-
-
 }
