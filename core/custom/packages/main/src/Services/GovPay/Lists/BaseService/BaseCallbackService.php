@@ -2,7 +2,6 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
-
 use EvolutionCMS\Main\Controllers\Department\ServiceOrderSuccessController;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;

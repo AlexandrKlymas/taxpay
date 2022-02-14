@@ -2,20 +2,16 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\Fines;
 
-
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\FinesSearcher\Models\Fine;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 
-class FinesRecipientsGenerator implements IPaymentRecipientsGenerator
+class FinesRecipientsGenerator implements IRecipientsGenerator
 {
-
-
     public function getPaymentRecipients($formFieldsValues): array
     {
         $fine = Fine::findOrFail($formFieldsValues['fine_id']);
-
 
         $paidInfo = json_decode($fine->data['paidinfo'],true);
 

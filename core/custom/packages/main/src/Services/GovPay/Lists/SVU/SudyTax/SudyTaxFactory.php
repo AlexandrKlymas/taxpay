@@ -2,8 +2,7 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax;
 
-
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPreviewGenerator;
@@ -12,7 +11,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 
 class SudyTaxFactory extends BaseServiceFactory
 {
-
     /**
      * @throws BindingResolutionException
      */
@@ -24,7 +22,7 @@ class SudyTaxFactory extends BaseServiceFactory
     /**
      * @throws BindingResolutionException
      */
-    public function getPaymentRecipientsGenerator(): IPaymentRecipientsGenerator
+    public function getPaymentRecipientsGenerator(): IRecipientsGenerator
     {
         return $this->container->make(SudyTaxRecipientsGenerator::class,$this->dependencies);
     }

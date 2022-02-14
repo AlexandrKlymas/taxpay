@@ -1,11 +1,9 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\IssueDriverLicense;
 
-
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\ServiceFieldPriceCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\Bank;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
@@ -14,9 +12,8 @@ use EvolutionCMS\Main\Services\GovPay\Models\Service;
 use EvolutionCMS\Main\Services\GovPay\Models\TerritorialServiceCenter;
 use EvolutionCMS\Main\Services\GovPay\Support\PurposeHelpers;
 
-class IssueDriverLicensePaymentRecipientsGenerator implements IPaymentRecipientsGenerator
+class IssueDriverLicenseRecipientsGenerator implements IRecipientsGenerator
 {
-
     /**
      * @var ServiceFieldPriceCalculator
      */
@@ -41,13 +38,10 @@ class IssueDriverLicensePaymentRecipientsGenerator implements IPaymentRecipients
 
         $recipientName = $territorialServiceCenter->name_ua;
 
-
         $rsc = TerritorialServiceCenter::where('region_id',$formFieldsValues['regional_service_center'])->where('name_ua','like','РСЦ%')->first();
         if($rsc){
             $recipientName = $rsc->name_ua;
         }
-
-
 
         $bankName = '';
         $mfo = $regionalServiceCenter->mfo;
@@ -77,7 +71,6 @@ class IssueDriverLicensePaymentRecipientsGenerator implements IPaymentRecipients
         $mainPaymentRecipientDto->setServiceName('Видача водійський посвідчент');
         $mainPaymentRecipientDto->setPurpose($purpose);
         $mainPaymentRecipientDto->setRecipientType(PaymentRecipient::RECIPIENT_TYPE_MAIN);
-
 
         return [
             $mainPaymentRecipientDto
