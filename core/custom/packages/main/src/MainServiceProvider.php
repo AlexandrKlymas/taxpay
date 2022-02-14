@@ -235,22 +235,22 @@ class MainServiceProvider extends ServiceProvider
             ]
         );
 
-//        $this->app->registerModule(
-//            'Реквизиты счетов регионов: Виконавча Влада',
-//            dirname(__DIR__) . '/modules/WebixTableModule.php',
-//            '',
-//            [
-//                'module_alias' => 'VVPayDetails',
-//
-//                'name' => 'Реквизиты счетов регионов: Виконавча Влада',
-//                'fields' => 'id, region, district, recipient, iban, mfo, edrpou, active',
-//                'fields_for_popup_editor' => '',
-//                'fields_names' => 'ID,Область чи місто, Районний відділ, Одержувач (установа), IBAN, МФО, Єдрпоу, Активний',
-//                'idField' => 'id',
-//                'table' => 'vvpay_details',
-//                'display' => '30'
-//            ]
-//        );
+        $this->app->registerModule(
+            'Реквизиты счетов регионов: Виконавча Влада',
+            dirname(__DIR__) . '/modules/WebixTableModule.php',
+            '',
+            [
+                'module_alias' => 'VVPayDetails',
+
+                'name' => 'Реквизиты счетов регионов: Виконавча Влада',
+                'fields' => 'id, region, district, recipient, iban, mfo, edrpou, active',
+                'fields_for_popup_editor' => '',
+                'fields_names' => 'ID,Область чи місто, Районний відділ, Одержувач (установа), IBAN, МФО, Єдрпоу, Активний',
+                'idField' => 'id',
+                'table' => 'vvpay_details',
+                'display' => '30'
+            ]
+        );
 
         $this->app->registerModule(
             'Реквизиты счетов регионов: Парковка',

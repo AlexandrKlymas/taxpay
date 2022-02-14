@@ -14,30 +14,30 @@
             <div class="col payment-services-left">
 
                 <div class="box box-form">
-                    @if($error)
+                    @if(!empty($error))
                         <div class="service-error">
                             {{ $error }}
                         </div>
                     @endif
-                    @if($form)
-                    <p class="title">ЗАПОВНИТИ ФОРМУ:</p>
-                    <form class="form-payment js-service-form service-{{ $serviceId }}" id="service-form" data-validation-form>
-                        <input type="hidden" name="service_id" value="{{ $serviceId }}">
+                    @if(!empty($form))
+                        <p class="title">ЗАПОВНИТИ ФОРМУ:</p>
+                        <form class="form-payment js-service-form service-{{ $serviceId }}" id="service-form" data-validation-form>
+                            <input type="hidden" name="service_id" value="{{ $serviceId }}">
 
-                        <div id="service-form-errors"></div>
+                            <div id="service-form-errors"></div>
 
-                        {!! $form !!}
+                            {!! $form !!}
 
 
-                        <p>Натискаючи кнопку "Продовжити" Ви погоджуєтеся з умовами <a href="{{ UrlProcessor::makeUrl(7) }}" target="_blank" >публічного договору</a>.</p>
+                            <p>Натискаючи кнопку "Продовжити" Ви погоджуєтеся з умовами <a href="{{ UrlProcessor::makeUrl(7) }}" target="_blank" >публічного договору</a>.</p>
 
-                        <div class="form-footer">
-                            <div class="back-wrap">
-                                <a href="{{ \EvolutionCMS\Facades\UrlProcessor::makeUrl(3) }}" class="back">Назад</a>
+                            <div class="form-footer">
+                                <div class="back-wrap">
+                                    <a href="{{ \EvolutionCMS\Facades\UrlProcessor::makeUrl(3) }}" class="back">Назад</a>
+                                </div>
+                                <input type="submit" class="btn" value="Продовжити">
                             </div>
-                            <input type="submit" class="btn" value="Продовжити">
-                        </div>
-                    </form>
+                        </form>
                     @endif
                 </div>
             </div>

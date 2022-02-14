@@ -4,7 +4,6 @@ namespace EvolutionCMS\Main\Services\GovPay\Lists\DVS\VVPay;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPaymentCalculator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseServiceFactory;
 

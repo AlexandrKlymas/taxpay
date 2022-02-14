@@ -22,11 +22,15 @@ class LayoutFields implements IField
         return 'partials.services.fields.layout';
     }
 
-    public function getDataForRender($formData = []): array
+    public function getDataForRender($formData = [], bool $view = true): array
     {
         $renderedFields = [];
         foreach ($this->fields as $field) {
-            $renderedFields[] = \View::make($field->getViewFile(), $field->getDataForRender());
+            if($view){
+                $renderedFields[] = \View::make($field->getViewFile(), $field->getDataForRender());
+            }else{
+                $renderedFields[] = $field->getDataForRender();
+            }
         }
         return [
             'fields'=>$renderedFields

@@ -40,7 +40,7 @@ Event::listen('evolution.OnDocFormRender',function ($params){
         'fines_by_act',
         'park_fines_by_act',
         'weight_fines_by_act',
-        'pcr',
+        'vvpay',
     ])){
         $tab_1 = new Plugin ($modx, $modx_lang_attribute);
         $tab_1->addDocumentPramas($id, 'Комиссия', Helpers::getModuleId('commissions'), 'commission');
@@ -82,8 +82,12 @@ Event::listen('evolution.OnDocFormRender',function ($params){
             $tab_2 = new Plugin ($modx, $modx_lang_attribute);
             $tab_2->addDocumentPramas($id, 'Счета штрафов', Helpers::getModuleId('ParkPencodeItems'), 'ParkPencodeItems', '', '');
             $output .= $tab_2->render();
+            break;
 
-            //
+        case 'vvpay':
+            $tab_2 = new Plugin ($modx, $modx_lang_attribute);
+            $tab_2->addDocumentPramas($id, 'Счета', Helpers::getModuleId('VVPayDetails'), 'VVPayDetails', '', '');
+            $output .= $tab_2->render();
             break;
 
 //        case 51:
