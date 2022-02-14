@@ -2,14 +2,13 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\MVS\ParkFinesByAct;
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseServiceFactory;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ParkFinesByActFactory extends BaseServiceFactory
 {
-
     public function getFormConfigurator(): IFormConfigurator
     {
         return $this->container->make(ParkFinesByActFormConfigurator::class,$this->dependencies);
@@ -18,7 +17,7 @@ class ParkFinesByActFactory extends BaseServiceFactory
     /**
      * @throws BindingResolutionException
      */
-    public function getPaymentRecipientsGenerator(): IPaymentRecipientsGenerator
+    public function getPaymentRecipientsGenerator(): IRecipientsGenerator
     {
         return $this->container->make(ParkFinesByActRecipientsGenerator::class,$this->dependencies);
     }

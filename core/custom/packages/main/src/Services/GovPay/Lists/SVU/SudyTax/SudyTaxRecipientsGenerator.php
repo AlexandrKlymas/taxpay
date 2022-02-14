@@ -3,16 +3,16 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax;
 
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 
-class SudyTaxRecipientsGenerator implements IPaymentRecipientsGenerator
+class SudyTaxRecipientsGenerator implements IRecipientsGenerator
 {
     /**
      * @var SumCalculator
      */
-    private $sumCalculator;
+    private SumCalculator $sumCalculator;
 
     public function __construct(SumCalculator $sumCalculator)
     {

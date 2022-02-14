@@ -2,16 +2,14 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax;
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPaymentCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseServiceFactory;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
-class SudyTaxFormFactory extends BaseServiceFactory implements IServiceFactory
+class SudyTaxFormFactory extends BaseServiceFactory
 {
-
     /**
      * @throws BindingResolutionException
      */
@@ -23,16 +21,13 @@ class SudyTaxFormFactory extends BaseServiceFactory implements IServiceFactory
     /**
      * @throws BindingResolutionException
      */
-    public function getPaymentRecipientsGenerator(): IPaymentRecipientsGenerator
+    public function getPaymentRecipientsGenerator(): IRecipientsGenerator
     {
         return $this->container->make(SudyTaxRecipientsGenerator::class,$this->dependencies);
     }
 
-    /**
-     * @throws BindingResolutionException
-     */
-    public function getPaymentCalculator(): IPaymentCalculator
+    public function getCallbacksService(): ICallbackService
     {
-        return $this->container->make(SudyTaxPaymentCalculator::class,$this->dependencies);
+        return $this->container->make(SudyTaxCallbackService::class,$this->dependencies);
     }
 }

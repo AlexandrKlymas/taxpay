@@ -3,11 +3,11 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax;
 
 use EvolutionCMS\Main\Services\GovPay\Calculators\Forms\SumCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 
-class ECabinetTaxRecipientsGenerator implements IPaymentRecipientsGenerator
+class ECabinetTaxRecipientsGenerator implements IRecipientsGenerator
 {
     /**
      * @var SumCalculator

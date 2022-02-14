@@ -2,8 +2,7 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
-
-use EvolutionCMS\Main\Services\GovPay\Contracts\IPaymentRecipientsGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICommissionsManager;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IDataValidator;
@@ -102,5 +101,5 @@ abstract class BaseServiceFactory implements IServiceFactory
         return $this->container->make(BasePreviewGenerator::class, $this->dependencies);
     }
 
-    abstract public function getPaymentRecipientsGenerator(): IPaymentRecipientsGenerator;
+    abstract public function getPaymentRecipientsGenerator(): IRecipientsGenerator;
 }
