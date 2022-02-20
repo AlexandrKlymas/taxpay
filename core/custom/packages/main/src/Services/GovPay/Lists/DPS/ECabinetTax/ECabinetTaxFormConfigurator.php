@@ -2,10 +2,9 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax;
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
 
-class ECabinetTaxFormConfigurator extends BaseFormConfigurator implements IFormConfigurator
+class ECabinetTaxFormConfigurator extends BaseFormConfigurator
 {
 
     /**
