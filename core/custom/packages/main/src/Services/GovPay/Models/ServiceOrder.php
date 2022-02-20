@@ -2,7 +2,6 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Models;
 
-
 use Carbon\Carbon;
 use EvolutionCMS\Main\Services\GovPay\Dto\CommissionDto;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentAmountDto;
@@ -10,6 +9,8 @@ use EvolutionCMS\Main\Services\GovPay\Statuses\StatusSubmitted;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusSuccess;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusWait;
 use EvolutionCMS\Main\Support\Helpers;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -42,40 +43,40 @@ use Ramsey\Uuid\Uuid;
  * @property string|null $history
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient[] $mainRecipients
+ * @property-read Collection|PaymentRecipient[] $mainRecipients
  * @property-read int|null $main_recipients_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient[] $recipients
+ * @property-read Collection|PaymentRecipient[] $recipients
  * @property-read int|null $recipients_count
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder query()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereBankCommission($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereFormData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereFullName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereInvoiceFileHtml($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereInvoiceFilePdf($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayCommissionAutoCalculated($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayPaymentDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayRealCommission($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayResponse($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereOrderHash($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder wherePaymentHash($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereProfit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereServiceData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereServiceFee($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereServiceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereSum($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereUserGeo($value)
+ * @method static Builder|ServiceOrder newModelQuery()
+ * @method static Builder|ServiceOrder newQuery()
+ * @method static Builder|ServiceOrder query()
+ * @method static Builder|ServiceOrder whereBankCommission($value)
+ * @method static Builder|ServiceOrder whereCreatedAt($value)
+ * @method static Builder|ServiceOrder whereEmail($value)
+ * @method static Builder|ServiceOrder whereFormData($value)
+ * @method static Builder|ServiceOrder whereFullName($value)
+ * @method static Builder|ServiceOrder whereId($value)
+ * @method static Builder|ServiceOrder whereInvoiceFileHtml($value)
+ * @method static Builder|ServiceOrder whereInvoiceFilePdf($value)
+ * @method static Builder|ServiceOrder whereLiqpayCommissionAutoCalculated($value)
+ * @method static Builder|ServiceOrder whereLiqpayPaymentDate($value)
+ * @method static Builder|ServiceOrder whereLiqpayRealCommission($value)
+ * @method static Builder|ServiceOrder whereLiqpayResponse($value)
+ * @method static Builder|ServiceOrder whereLiqpayStatus($value)
+ * @method static Builder|ServiceOrder whereOrderHash($value)
+ * @method static Builder|ServiceOrder wherePaymentHash($value)
+ * @method static Builder|ServiceOrder wherePhone($value)
+ * @method static Builder|ServiceOrder whereProfit($value)
+ * @method static Builder|ServiceOrder whereServiceData($value)
+ * @method static Builder|ServiceOrder whereServiceFee($value)
+ * @method static Builder|ServiceOrder whereServiceId($value)
+ * @method static Builder|ServiceOrder whereStatus($value)
+ * @method static Builder|ServiceOrder whereSum($value)
+ * @method static Builder|ServiceOrder whereTotal($value)
+ * @method static Builder|ServiceOrder whereUpdatedAt($value)
+ * @method static Builder|ServiceOrder whereUserGeo($value)
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceOrder whereLiqpayTransactionId($value)
+ * @method static Builder|ServiceOrder whereLiqpayTransactionId($value)
  */
 class ServiceOrder extends \Eloquent
 {
@@ -130,7 +131,7 @@ class ServiceOrder extends \Eloquent
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|self[]
+     * @return Builder[]|Collection|self[]
      */
     public static function getPaidServiceOrders()
     {
@@ -138,7 +139,7 @@ class ServiceOrder extends \Eloquent
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|self[]
+     * @return Builder[]|Collection|self[]
      */
     public static function getSubmittedServiceOrders()
     {
