@@ -20,6 +20,7 @@ use EvolutionCMS\Main\Services\TelegramBot\Console\SearchFinesCommand;
 use EvolutionCMS\Main\Services\TelegramBot\Console\SendFinesNotificationCommand;
 use EvolutionCMS\Main\Services\TelegramBot\Console\SetWebHookCommand;
 use EvolutionCMS\ServiceProvider;
+use Exception;
 use TelegramBot\Api\BotApi;
 
 class MainServiceProvider extends ServiceProvider
@@ -31,9 +32,9 @@ class MainServiceProvider extends ServiceProvider
      * Если же указан namespace то файл test создаст чанк/сниппет с именем main#test
      * При этом поддерживаются файлы в подпапках. Т.е. файл test из папки subdir создаст элемент с именем subdir/test
      */
-    protected $namespace = 'main';
+    protected string $namespace = 'main';
 
-    protected $commands = [
+    protected array $commands = [
 
         EchoCommand::class,
         CronCommand::class,
@@ -59,6 +60,7 @@ class MainServiceProvider extends ServiceProvider
      * Register the service provider.
      *
      * @return void
+     * @throws Exception
      */
     public function register()
     {
@@ -276,7 +278,6 @@ class MainServiceProvider extends ServiceProvider
             '',
             [
                 'module_alias' => 'FineSearchHistory',
-
             ]
         );
 
@@ -288,25 +289,17 @@ class MainServiceProvider extends ServiceProvider
 
         );
 
+        $this->app->registerModule(
+            'РАЦСи',
+            dirname(__DIR__) . '/modules/registry_offices/registry_offices.module.php',
+            '',
+        );
 
-        //
-
-//        $this->app->registerModule(
-//            '',
-//            dirname(__DIR__) . '/modules/WebixTableModule.php',
-//            '',
-//            [
-//                'module_alias'=>'',
-//
-//                'name' => '',
-//                'fields' => '',
-//                'fields_for_popup_editor' => '',
-//                'fields_names' => '',
-//                'idField' => 'id',
-//                'table' => '',
-//                'display' => '30'
-//            ]
-//        );
+        $this->app->registerModule(
+            'Сервисные комиссии',
+            dirname(__DIR__) . '/modules/commissions/commissions.module.php',
+            '',
+        );
 
     }
 

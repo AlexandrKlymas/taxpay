@@ -2,7 +2,6 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists;
 
-
 use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
 use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax\ECabinetTaxFactory;
@@ -95,5 +94,10 @@ class ServicesAlias
     public function getServiceFactory(int $serviceId): string
     {
         return $this->getService($serviceId)['factory'];
+    }
+
+    public function getServicesList(): array
+    {
+        return $this->serviceIdMap;
     }
 }
