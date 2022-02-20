@@ -2,23 +2,19 @@
 
 namespace EvolutionCMS\Main\Controllers\Department\Services;
 
-
 use Carbon\Carbon;
 use EvolutionCMS\Main\Controllers\BaseController;
 use EvolutionCMS\Main\Services\FineSearchLog\Models\FineSearchLog;
-use EvolutionCMS\Main\Services\GovPay\Contracts\IFinesApi;
 use EvolutionCMS\Main\Services\FinesSearcher\Documents;
 use EvolutionCMS\Main\Services\FinesSearcher\FinesSearcher;
 use EvolutionCMS\Main\Services\FinesSearcher\SearchCommands\ByDrivingLicenseSearchCommand;
 use EvolutionCMS\Main\Services\FinesSearcher\SearchCommands\ByFineSearchCommand;
 use EvolutionCMS\Main\Services\FinesSearcher\SearchCommands\ByTaxNumberSearchCommand;
 use EvolutionCMS\Main\Services\FinesSearcher\SearchCommands\ByTechPassportSearchCommand;
-use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Support\Helpers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
-
 
 class FinesController extends BaseController
 {
@@ -46,14 +42,11 @@ class FinesController extends BaseController
 
             try {
                 (new FinesSearcher())->updateFine($fineId);
-                $serviceProcessor = new ServiceManager();
-                $data = array_merge($serviceProcessor->getDataForPreview(47, [
-                    'fine_id' => $fineId,
 
-                ]));
-
+                $serviceFactory = ServiceFactory::makeFactoryForService(47);
                 $this->data['fineId'] = $fineId;
-                $this->data['finePreview'] = View::make('partials.services.preview')->with($data)->with('hideBackLink', true)->render();
+                $previewGenerator = $serviceFactory->getPreviewGenerator();
+                $this->data['finePreview'] = $previewGenerator->generatePreview(['fine_id' => $fineId,]);
             } catch (ValidationException $e) {
                 $this->data['previewFineError'] = implode('<br>', array_map(function ($fieldErrors) {
                     return implode(',', $fieldErrors);
