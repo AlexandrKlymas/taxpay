@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     <title>{{ !empty($documentObject['titl'])?$documentObject['titl']:$documentObject['pagetitle'] }}</title>
-    <meta name="description" content="{{ !empty($documentObject['desc'])?$documentObject['desc']:$documentObject['introtext'] }}">
-    <meta name="keywords" content="{{ !empty($documentObject['keyw'])?$documentObject['keyw']:$documentObject['pagetitle'] }}">
+    <meta name="description" content="{{ evo_parser($documentObject['desc']) }}">
+    <meta name="keywords" content="{{ evo_parser($documentObject['keyw'])}}">
 
     @if($documentObject['noIndex'])
         <meta name="robots" content="noindex, nofollow" />
