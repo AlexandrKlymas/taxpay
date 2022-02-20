@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * EvolutionCMS\Main\Services\GovPay\Models\ServiceCommissions
+ * EvolutionCMS\Main\Services\GovPay\Models\ServiceCommission
  *
  * @property int $id
  * @property int $service_recipient_id
@@ -19,7 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  **/
 
-class ServiceCommissions extends Model
+class ServiceCommission extends Model
 {
     protected $table = 'service_commissions';
 
