@@ -1,6 +1,6 @@
 <?php
 
-namespace EvolutionCMS\Main\Models;
+namespace EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage;
 
 use Illuminate\Database\Eloquent\Model;
 

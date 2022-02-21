@@ -1,11 +1,9 @@
 <?php
 
 use EvolutionCMS\Main\Models\DLSiteContent;
-use EvolutionCMS\Main\Models\RegistryOffice;
-use EvolutionCMS\Main\Models\RegistryOfficeUser;
+use EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage\RegistryOfficeUser;
 use EvolutionCMS\Main\Services\GovPay\Models\SubServices;
 use EvolutionCMS\Main\Support\BLangModelHelper;
-
 
 $filesystem = new Illuminate\Filesystem\Filesystem;
 $dir = EVO_CORE_PATH . 'custom/packages/main/modules/registry_offices/views';
