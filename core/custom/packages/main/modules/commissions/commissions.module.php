@@ -3,6 +3,7 @@
 use EvolutionCMS\Main\Models\DLSiteContent;
 use EvolutionCMS\Main\Services\GovPay\Lists\ServicesAlias;
 use EvolutionCMS\Main\Services\GovPay\Models\CommissionsRecipients;
+use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceCommission;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\SubServices;
@@ -26,6 +27,10 @@ $data = [
     'manager_theme' => EvolutionCMS()->config['manager_theme'],
     'action' => $action,
     'module_path'=>$modulePath,
+    'recipient_types'=>[
+        PaymentRecipient::RECIPIENT_GOVPAY_PROFIT,
+        PaymentRecipient::RECIPIENT_TK_COMMISSION,
+    ]
 ];
 
 $data['breadcrumbs'] = [];
@@ -103,6 +108,7 @@ switch ($action) {
                 'mfo'=>$_POST['mfo'],
                 'iban'=>$_POST['iban'],
                 'purpose_template'=>$_POST['purpose_template'],
+                'recipient_type'=>$_POST['recipient_type'],
             ]);
         exit();
 
@@ -150,6 +156,7 @@ switch ($action) {
             'mfo'=>$_POST['mfo'],
             'iban'=>$_POST['iban'],
             'purpose_template'=>$_POST['purpose_template'],
+            'recipient_type'=>$_POST['recipient_type'],
         ]);
         exit();
 

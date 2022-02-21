@@ -20,6 +20,7 @@ class CreateCommissionsRecipientsTable extends Migration
             $table->integer('mfo');
             $table->string('iban');
             $table->string('purpose_template');
+            $table->string('recipient_type',30);
             $table->timestamps();
         });
     }

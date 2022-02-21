@@ -44,6 +44,24 @@
                                type="text" name="purpose_template">
                     </div>
 
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="edit_commissions_recipients_form-{{$commission_recipient['id']}}-recipient_type">
+                                Тип отримувача</label>
+                        </div>
+                        <select class="custom-select" name="recipient_type"
+                                value="{{$commission_recipient['recipient_type']}}"
+                                id="edit_commissions_recipients_form-{{$commission_recipient['id']}}-recipient_type">
+                            <option selected>Оберіть...</option>
+                            @foreach($recipient_types as $recipient_type)
+                                <option @if($recipient_type==$commission_recipient['recipient_type']) selected @endif
+                                        value="{{$recipient_type}}">
+                                    {{$recipient_type}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="form-row">
                         <div class="col">
                             <button class="btn btn-success mt-3 w-100" type="submit"><i class="fa fa-edit"></i> Зберегти зміни</button>
