@@ -3,5 +3,5 @@ namespace EvolutionCMS\Services\Contracts;
 
 interface IAmountCalculator
 {
-    public function calculate($formData):float;
+    public function calculate(array $formData):float;
 }

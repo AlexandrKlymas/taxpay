@@ -11,6 +11,7 @@ use EvolutionCMS\Main\Services\GovPay\Statuses\StatusWait;
 use EvolutionCMS\Main\Support\Helpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -80,8 +81,6 @@ use Ramsey\Uuid\Uuid;
  */
 class ServiceOrder extends \Eloquent
 {
-
-
     protected $guarded = ['id'];
 
     protected $dates = [
@@ -99,7 +98,6 @@ class ServiceOrder extends \Eloquent
         'sum' => 'float',
         'total' => 'float'
     ];
-
 
     public static function new(int $serviceId, array $formData, PaymentAmountDto $paymentAmountDto, CommissionDto $commissions)
     {
@@ -151,13 +149,13 @@ class ServiceOrder extends \Eloquent
         return ServiceOrder::firstWhere('payment_hash', $hash);
     }
 
-    public function mainRecipients()
+    public function mainRecipients(): HasMany
     {
         return $this->hasMany(PaymentRecipient::class)->where('recipient_type', 'main');
     }
 
 
-    public function isAllPaymentsFinished()
+    public function isAllPaymentsFinished(): bool
     {
         $allPaymentsFinished = true;
         foreach ($this->recipients as $recipient) {
@@ -168,7 +166,7 @@ class ServiceOrder extends \Eloquent
         return $allPaymentsFinished;
     }
 
-    public function recipients()
+    public function recipients(): HasMany
     {
         return $this->hasMany(PaymentRecipient::class);
     }
@@ -178,7 +176,7 @@ class ServiceOrder extends \Eloquent
         $this->history = array_merge($this->history??[],[$log. ', ' .date('d-m-Y h:i:s',strtotime('now'))]);
     }
 
-    public function save(array $options = [])
+    public function save(array $options = []): bool
     {
         if(!empty($this->form_data['full_name'])){
             $this->full_name = $this->form_data['full_name'];
@@ -202,6 +200,7 @@ class ServiceOrder extends \Eloquent
     {
         $this->form_data = array_merge($this->form_data, [$field => $value]);
     }
+
     public function updateServiceData($field, $value)
     {
         if(!is_array($this->service_data)){
@@ -222,8 +221,7 @@ class ServiceOrder extends \Eloquent
         }
     }
 
-
-    public function delete()
+    public function delete(): ?bool
     {
         foreach ($this->recipients as $recipient) {
             $recipient->delete();

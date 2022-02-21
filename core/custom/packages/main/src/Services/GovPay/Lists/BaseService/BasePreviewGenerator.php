@@ -2,8 +2,6 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
-
-use EvolutionCMS\Main\Services\GovPay\Calculators\FinalPaymentCalculator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IPreviewGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
 use Illuminate\Support\Facades\View;
@@ -16,6 +14,7 @@ class BasePreviewGenerator implements IPreviewGenerator
     {
         $this->serviceFactory = $serviceFactory;
     }
+
     public function getPreview(array $data):string
     {
         return View::make('partials.services.preview')->with($data)->render();
@@ -23,7 +22,7 @@ class BasePreviewGenerator implements IPreviewGenerator
 
     public function getDataForPreview(array $requestData): array
     {
-        $finalPaymentCalculator = new FinalPaymentCalculator($this->serviceFactory->getServiceId());
+        $finalPaymentCalculator = $this->serviceFactory->getFinalCalculator();
 
         $paymentRecipientGenerator = $this->serviceFactory->getPaymentRecipientsGenerator();
 

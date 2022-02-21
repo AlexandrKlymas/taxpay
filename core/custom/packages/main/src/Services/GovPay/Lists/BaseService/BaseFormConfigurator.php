@@ -1,6 +1,6 @@
 <?php
-namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
+namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IField;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;

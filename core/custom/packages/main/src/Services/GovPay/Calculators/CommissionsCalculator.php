@@ -1,62 +1,57 @@
 <?php
-namespace EvolutionCMS\Main\Services\GovPay\Calculators;
 
+namespace EvolutionCMS\Main\Services\GovPay\Calculators;
 
 use EvolutionCMS\Main\Services\GovPay\Dto\CommissionDto;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentAmountDto;
-use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 
 class CommissionsCalculator
 {
+    /**
+     * @var float
+     */
+    private float $liqPayCommissionPercent;
+    /**
+     * @var float
+     */
+    private float $liqPayMinCommission;
+    /**
+     * @var float
+     */
+    private float $bankCommissionPercent;
+    /**
+     * @var float
+     */
+    private float $bankMinCommission;
 
-    /**
-     * @var float
-     */
-    private $liqpayCommissionPercent;
-    /**
-     * @var float
-     */
-    private $liqpayMinCommission;
-    /**
-     * @var float
-     */
-    private $bankCommissionPercent;
-    /**
-     * @var float
-     */
-    private $bankMinCommission;
-
-    public function __construct(float $liqpayCommissionPercent,float $liqpayMinCommission, float $bankCommissionPercent, float $bankMinCommission)
+    public function __construct(float $liqPayCommissionPercent,float $liqPayMinCommission, float $bankCommissionPercent, float $bankMinCommission)
     {
-        $this->liqpayCommissionPercent = $liqpayCommissionPercent;
-        $this->liqpayMinCommission = $liqpayMinCommission;
+        $this->liqPayCommissionPercent = $liqPayCommissionPercent;
+        $this->liqPayMinCommission = $liqPayMinCommission;
         $this->bankCommissionPercent = $bankCommissionPercent;
         $this->bankMinCommission = $bankMinCommission;
-
-
     }
-
 
     /**
      * @param PaymentAmountDto $paymentAmountDto
+     * @return CommissionDto
      */
-    public function calculate(PaymentAmountDto $paymentAmountDto){
-
-        $liqpayCommissionAutoCalculated = round($paymentAmountDto->getTotal() * $this->liqpayCommissionPercent / 100,2);
+    public function calculate(PaymentAmountDto $paymentAmountDto): CommissionDto
+    {
+        $liqPayCommissionAutoCalculated = round($paymentAmountDto->getTotal() * $this->liqPayCommissionPercent / 100,2);
 
         $bankCommission = round($paymentAmountDto->getSum() * $this->bankCommissionPercent / 100, 2);
-
 
         if ($bankCommission < $this->bankMinCommission) {
             $bankCommission = $this->bankMinCommission;
         }
 
-        if ($liqpayCommissionAutoCalculated < $this->liqpayMinCommission) {
-            $liqpayCommissionAutoCalculated = $this->liqpayMinCommission;
+        if ($liqPayCommissionAutoCalculated < $this->liqPayMinCommission) {
+            $liqPayCommissionAutoCalculated = $this->liqPayMinCommission;
         }
 
+        $profit = round($paymentAmountDto->getServiceFee() - $liqPayCommissionAutoCalculated - $bankCommission,2);
 
-        $profit = round($paymentAmountDto->getServiceFee() - $liqpayCommissionAutoCalculated - $bankCommission,2);
-        return new CommissionDto($liqpayCommissionAutoCalculated,$bankCommission,$profit);
+        return new CommissionDto($liqPayCommissionAutoCalculated,$bankCommission,$profit);
     }
 }

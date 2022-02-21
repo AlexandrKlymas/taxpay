@@ -2,6 +2,9 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFeeCalculator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFinalCalculator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IOrderGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICallbackService;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICommissionsManager;
@@ -99,6 +102,30 @@ abstract class BaseServiceFactory implements IServiceFactory
     public function getPreviewGenerator(): IPreviewGenerator
     {
         return $this->container->make(BasePreviewGenerator::class, $this->dependencies);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getOrderGenerator(): IOrderGenerator
+    {
+        return $this->container->make(BaseOrderGenerator::class, $this->dependencies);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getFeeCalculator(): IFeeCalculator
+    {
+        return $this->container->make(BaseFeeCalculator::class, $this->dependencies);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getFinalCalculator(): IFinalCalculator
+    {
+        return $this->container->make(BaseFinalCalculator::class, $this->dependencies);
     }
 
     abstract public function getPaymentRecipientsGenerator(): IRecipientsGenerator;
