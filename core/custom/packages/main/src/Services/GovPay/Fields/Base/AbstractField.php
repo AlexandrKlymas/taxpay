@@ -2,18 +2,15 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Fields\Base;
 
-use EvolutionCMS\Main\Services\GovPay\Contracts\IField as IFieldAlias;
-use EvolutionCMS\Main\Services\GovPay\Support\FieldHelpers;
 use EvolutionCMS\Main\Services\GovPay\Support\FieldJqueryValidatorRulesRender;
 use EvolutionCMS\Main\Support\Helpers;
 
 class AbstractField
 {
-    protected $name;
-    protected $rules = [];
-    protected $fieldJqueryValidatorRulesRender;
-    private $validationMessages = [];
-
+    protected string $name;
+    protected array $rules = [];
+    protected FieldJqueryValidatorRulesRender $fieldJqueryValidatorRulesRender;
+    private array $validationMessages = [];
 
     public function __construct($name,$rules)
     {
@@ -77,7 +74,7 @@ class AbstractField
 
     }
 
-    private function getValidationMessages()
+    private function getValidationMessages(): array
     {
         return $this->validationMessages;
     }

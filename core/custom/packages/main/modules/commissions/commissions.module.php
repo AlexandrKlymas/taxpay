@@ -3,7 +3,7 @@
 use EvolutionCMS\Main\Models\DLSiteContent;
 use EvolutionCMS\Main\Services\GovPay\Lists\ServicesAlias;
 use EvolutionCMS\Main\Services\GovPay\Models\CommissionsRecipients;
-use EvolutionCMS\Main\Services\GovPay\Models\ServiceCommissions;
+use EvolutionCMS\Main\Services\GovPay\Models\ServiceCommission;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\SubServices;
 use EvolutionCMS\Main\Support\BLangModelHelper;
@@ -107,17 +107,17 @@ switch ($action) {
         exit();
 
     case 'edit_service_commission':
-        ServiceCommissions::where('id',$_POST['id'])
+        ServiceCommission::where('id',$_POST['id'])
             ->update([
                 $_POST['field']=>$_POST['value']
             ]);
         exit();
     case 'delete_service_recipient':
         ServiceRecipient::find($_POST['id'])->delete();
-        ServiceCommissions::where('service_recipient_id',$_POST['id'])->delete();
+        ServiceCommission::where('service_recipient_id',$_POST['id'])->delete();
         exit();
     case 'add_service_recipient_commission':
-        ServiceCommissions::create([
+        ServiceCommission::create([
             'service_recipient_id'=>$_POST['service_recipient_id'],
             'commissions_recipient_id'=>$_POST['commissions_recipient_id'],
             'percent'=>$_POST['percent'],
@@ -138,7 +138,7 @@ switch ($action) {
             $data['breadcrumbs'][] = ['url'=>$moduleUrl.'action=sub_service'.'&service_id='.$data['service']['id'].'&sub_service_id='.$data['sub_service']['id'],'title'=>$data['sub_service']['name']];
         }
         $data['breadcrumbs'][] = ['url'=>'','title'=>$data['service_recipient']['recipient_name']];
-        $data['service_commissions'] = ServiceCommissions::where('service_recipient_id',$data['service_recipient']['id'])
+        $data['service_commissions'] = ServiceCommission::where('service_recipient_id',$data['service_recipient']['id'])
             ->get()->toArray();
         $data['commissions_recipients'] = CommissionsRecipients::all()->keyBy('id')->toArray();
         break;

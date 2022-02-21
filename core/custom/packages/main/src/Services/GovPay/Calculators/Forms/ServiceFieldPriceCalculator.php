@@ -5,8 +5,7 @@ use EvolutionCMS\Main\Services\GovPay\Models\Service;
 
 class ServiceFieldPriceCalculator
 {
-
-    public function calculate($formData): float
+    public function calculate(array $formData): float
     {
         $servicePrice = Service::findOrFail($formData['service'])->price;
         return round(floatval($servicePrice),2);
