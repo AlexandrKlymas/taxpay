@@ -1,10 +1,10 @@
 <?php
+
 namespace EvolutionCMS\Main\Services\GovPay\Calculators\Forms;
 
 class SumCalculator
 {
-
-    public function calculate($formData): float
+    public function calculate(array $formData): float
     {
         $sum = 0;
         if(isset($formData['sum'])){

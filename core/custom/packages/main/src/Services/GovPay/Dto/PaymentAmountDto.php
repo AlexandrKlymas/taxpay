@@ -1,16 +1,12 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\GovPay\Dto;
-
-
 
 class PaymentAmountDto
 {
-
-    private $sum;
-    private $serviceFee;
-    private $total;
+    private float $sum;
+    private float $serviceFee;
+    private float $total;
 
     public function __construct($sum, $serviceFee, $total)
     {
@@ -19,17 +15,17 @@ class PaymentAmountDto
         $this->total = $total;
     }
 
-    public function getSum()
+    public function getSum(): float
     {
         return $this->sum;
     }
 
-    public function getServiceFee()
+    public function getServiceFee(): float
     {
         return $this->serviceFee;
     }
 
-    public function getTotal()
+    public function getTotal(): float
     {
         return $this->total;
     }
