@@ -2,13 +2,13 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage;
 
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\TotalCaptionField;
 use EvolutionCMS\Main\Services\GovPay\Fields\FullNameField;
 use EvolutionCMS\Main\Services\GovPay\Fields\HiddenStaticSumField;
 use EvolutionCMS\Main\Services\GovPay\Fields\HiddenTextField;
 use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
-use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Models\SubServices;
 
 class MarriageFormConfigurator extends BaseFormConfigurator
@@ -19,12 +19,10 @@ class MarriageFormConfigurator extends BaseFormConfigurator
     {
         $registryOfficeId = $_SESSION['fields_data']['registry_office']??0;
         unset($_SESSION['fields_data']);
-        $registryOffice = SubServices::find($registryOfficeId);
 
-        $serviceProcessor = new ServiceManager();
-        $commissions = $serviceProcessor->getCommission($this->serviceId,$registryOfficeId);
-
-        dd($commissions);
+        $paymentAmountDto = ServiceFactory::makeFactoryForService($this->serviceId)
+            ->getFinalCalculator()
+            ->calculate(['registry_office'=>$registryOfficeId]);
 
         return [
             new LayoutFields([
@@ -36,8 +34,8 @@ class MarriageFormConfigurator extends BaseFormConfigurator
             ]),
 
             new LayoutFields([
-                HiddenStaticSumField::buildField($_SESSION['fields_data']['sum']??''),
-                TotalCaptionField::build('До сплати',1.00)
+                HiddenStaticSumField::buildField($paymentAmountDto->getSum()),
+                TotalCaptionField::build('До сплати',$paymentAmountDto->getTotal())
             ])
 
         ];
