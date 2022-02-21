@@ -7,14 +7,10 @@ use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 
 class PCRInvoiceGenerator extends BaseInvoiceGenerator
 {
-    public function generate(ServiceOrder $serviceOrder)
+    public function generate(ServiceOrder $serviceOrder):string
     {
         $invoices = '';
         $recipients = $serviceOrder->mainRecipients;
-
-        evo()->invokeEvent('OnCheckFound',[
-            'service_order'=>$serviceOrder,
-        ]);
 
         foreach ($recipients as $recipient) {
 
