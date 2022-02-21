@@ -11,7 +11,7 @@ class MarriageCommissionsManager extends BaseCommissionsManager
     public function getCommissions(int $subServiceId=0): array
     {
         $serviceRecipients = ServiceRecipient::where('sub_service_id',$subServiceId)
-            ->get()->toArray();
+            ->get();
 
         if(empty($serviceRecipients)){
             return [];
@@ -19,16 +19,18 @@ class MarriageCommissionsManager extends BaseCommissionsManager
 
         $commissions = [];
         foreach($serviceRecipients as $serviceRecipient){
-            $serviceRecipientCommissions = ServiceCommission::where('service_recipient_id',$serviceRecipient['id'])
+            $serviceRecipientCommissions = ServiceCommission::where('service_recipient_id',$serviceRecipient->id)
                 ->get();
             if(!empty($serviceRecipientCommissions)){
                 foreach($serviceRecipientCommissions as $serviceRecipientCommission){
                     $commissions[] = [
+                        'service_recipient_id'=>$serviceRecipient->id,
                         'commissions_recipient_id'=>(int)$serviceRecipientCommission->commissions_recipient_id,
                         'percent'=>floatval($serviceRecipientCommission->percent),
                         'min'=>floatval($serviceRecipientCommission->min),
                         'max'=>floatval($serviceRecipientCommission->max),
                         'fix'=>floatval($serviceRecipientCommission->fix),
+                        'sum'=>$serviceRecipient->sum,
                     ];
                 }
             }
