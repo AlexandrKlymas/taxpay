@@ -20,12 +20,12 @@ class MarriageRecipientsGenerator implements IRecipientsGenerator
         $regOffice = SubServices::where('service_id',176)
             ->where('id',$formFieldsValues['registry_office'])->first();
 
-        if(empty($subService)){
+        if(empty($regOffice)){
             throw new Exception('Recipients Шлюб за добу РАЦС не знайдено');
         }
 
         $serviceRecipients = ServiceRecipient::where('sub_service_id',$regOffice->id)
-            ->get()->toArray();
+            ->get();
 
         $recipients = [];
 
@@ -40,7 +40,7 @@ class MarriageRecipientsGenerator implements IRecipientsGenerator
             $serviceRecipientDto->setRecipientType(PaymentRecipient::RECIPIENT_TYPE_MAIN);
             $purpose = PurposeHelpers::parse($serviceRecipient->purpose_template,$formFieldsValues);
             $serviceRecipientDto->setPurpose($purpose);
-            $recipients[] = $serviceRecipientDto;
+            $recipients[$serviceRecipient->id] = $serviceRecipientDto;
         }
 
         return $recipients;
