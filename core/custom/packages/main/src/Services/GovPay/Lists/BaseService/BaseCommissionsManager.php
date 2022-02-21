@@ -9,32 +9,28 @@ use EvolutionCMS\Main\Services\GovPay\Models\Commission;
 class BaseCommissionsManager implements ICommissionsManager
 {
     protected int $serviceId;
+    protected IServiceFactory $serviceFactory;
 
     public function __construct(IServiceFactory $serviceFactory)
     {
-        $this->serviceId = $serviceFactory->getServiceId();
+        $this->serviceFactory = $serviceFactory;
+        $this->serviceId = $this->serviceFactory->getServiceId();
     }
 
-    public function getCommissions(): array
+    public function getCommissions(int $subServiceId = 0): array
     {
-        $commission = [
-            'total' => [
-
-            ],
-            'pension_fund' => [
-
-            ]
-        ];
+        $commission['total'] = [];
+        $commission['pension_fund'] = [];
 
         $serviceCommission = Commission::where('form_id', $this->serviceId)
             ->limit(1)->first();
 
         if ($serviceCommission) {
             $commission['total'] = [
-                "fix_summ" => $serviceCommission->fix_summ,
                 "percent" => $serviceCommission->percent,
-                "min_summ" => $serviceCommission->min_summ,
-                "max_summ" => $serviceCommission->max_summ,
+                "min" => $serviceCommission->min_summ,
+                "max" => $serviceCommission->max_summ,
+                "fix" => $serviceCommission->fix_summ,
             ];
         }
 

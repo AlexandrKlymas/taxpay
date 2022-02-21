@@ -1,56 +1,59 @@
-var $serviceField = $('#service_field');
-
+let $serviceField = $('#service_field');
 
 function addServicePrice(price) {
+
     if (!$serviceField.length) {
         return price;
     }
 
-    var option = $serviceField.find('option:selected');
-    var servicePrice = option.data('price') | 0;
+    let option = $serviceField.find('option:selected');
+    let servicePrice = option.data('price') | 0;
 
     price += servicePrice;
-    return price;
 
+    return price;
 }
 
 function addSumFieldPrice(price) {
-    var $field = $('.js-sum-field');
+
+    let $field = $('.js-sum-field');
 
     if ($field.length && $field.val() !== '') {
 
-        var value = parseFloat($field.val());
+        let value = parseFloat($field.val());
         price += value;
     }
+
     return price;
 }
 
 function updateTotalPrice() {
 
-    var price = addSumFieldPrice(0);
+    let price = addSumFieldPrice(0);
+
     price = addServicePrice(price);
 
-    var totalCommissionConfig = commissionConfig.total;
+    let totalCommissionConfig = commissionConfig.total;
 
-
-    var commission = 0;
+    let commission = 0;
 
     if (price > 0) {
 
-
-        if (totalCommissionConfig.fix_summ !== "0.00") {
-            commission = parseFloat(totalCommissionConfig.fix_summ);
-        } else if (totalCommissionConfig.percent !== "0") {
+        if (totalCommissionConfig.fix !== "0.00") {
+            commission = parseFloat(totalCommissionConfig.fix);
+        } else if (totalCommissionConfig.percent !== "0.00") {
             commission = price * parseFloat(totalCommissionConfig.percent) / 100;
-            if (totalCommissionConfig.min_summ !== "0.00" && parseFloat(totalCommissionConfig.min_summ) > commission) {
-                commission = parseFloat(totalCommissionConfig.min_summ);
+
+            if (totalCommissionConfig.min !== "0.00" && parseFloat(totalCommissionConfig.min) > commission) {
+                commission = parseFloat(totalCommissionConfig.min);
             }
-            if (totalCommissionConfig.max_summ !== "0.00" && parseFloat(totalCommissionConfig.max_summ) < commission) {
-                commission = parseFloat(totalCommissionConfig.max_summ);
+            if (totalCommissionConfig.max !== "0.00" && parseFloat(totalCommissionConfig.max) < commission) {
+                commission = parseFloat(totalCommissionConfig.max);
             }
         }
     }
-    var total = (price + commission).toFixed(2);
+
+    let total = (price + commission).toFixed(2);
 
     $('.js-total-price').val(total).text(total);
 
@@ -58,6 +61,7 @@ function updateTotalPrice() {
 }
 
 if (commissionConfig) {
+
     $(document)
         .ready(function () {
             updateTotalPrice()

@@ -2,12 +2,8 @@
 
 namespace EvolutionCMS\Main\Controllers\Department\Services;
 
-
 use EvolutionCMS\Facades\UrlProcessor;
 use EvolutionCMS\Main\Controllers\Department\PreviewServiceController;
-use EvolutionCMS\Main\Controllers\Department\ServiceController;
-use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
-use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Support\SignHelper;
 use EvolutionCMS\Main\Services\GovPay\Support\StrHelper;
 use Illuminate\Http\Request;
@@ -96,6 +92,5 @@ class ECabinetDpsPaymentController extends PreviewServiceController
         ];
 
         evo()->sendRedirect(UrlProcessor::makeUrl($serviceId,'','','full').'?'.http_build_query($newRequest));
-
     }
 }

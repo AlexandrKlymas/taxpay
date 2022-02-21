@@ -2,22 +2,26 @@
 
 namespace EvolutionCMS\Main\Controllers\Department\Services;
 
-
 use EvolutionCMS\Facades\UrlProcessor;
 use EvolutionCMS\Main\Controllers\Department\PreviewServiceController;
-use EvolutionCMS\Main\Services\GovPay\Factories\Calculators\FeeCalculatorFactory;
+use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\SVU\SudyTax\SudyTaxSignatureHelper;
 use EvolutionCMS\Main\Services\GovPay\Support\StrHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PHPMailer\PHPMailer\Exception;
 
 class SudytaxPaymentController extends PreviewServiceController
 {
     protected bool $autoCommissions = true;
+    protected int $serviceId;
 
+    /**
+     * @throws Exception
+     */
     public function sudytaxRoute(Request $request)
     {
-        $serviceId = 162;
+        $this->serviceId = 162;
         $requestArr = $request->toArray();
         evo()->logEvent(1, 1, json_encode($requestArr), 'COURT Request ' . $requestArr['NAME'] ?? 'NoName');
         unset($requestArr['q']);
@@ -66,7 +70,14 @@ class SudytaxPaymentController extends PreviewServiceController
             evo()->sendRedirect(UrlProcessor::makeUrl(123, '', '', 'full'));
         }
 
-        $commission = FeeCalculatorFactory::build($serviceId)->calculate($requestArr['SUM']);
+        $commission = ServiceFactory::makeFactoryForService($this->serviceId)
+            ->getFinalCalculator()
+            ->calculate(['sum'=>$requestArr['SUM']])
+            ->getServiceFee();
+
+        if($requestArr['COMMISSION']!=$commission){
+            evo()->logEvent(1,3,json_encode($requestArr),'SudyCommmission Error');
+        }
 
         if($this->autoCommissions){
             $requestArr['COMMISSION'] = $commission;
@@ -84,7 +95,7 @@ class SudytaxPaymentController extends PreviewServiceController
         }
 
         $newRequest = [
-            'service_id' => $serviceId,
+            'service_id' => $this->serviceId,
 
             'order' => $requestArr['ORDER'],
             'full_name' => StrHelper::namePrepare($requestArr['NAME']),
@@ -111,6 +122,6 @@ class SudytaxPaymentController extends PreviewServiceController
             $newRequest['email'] = $requestArr['EMAIL'];
         }
 
-        evo()->sendRedirect(UrlProcessor::makeUrl($serviceId, '', '', 'full') . '?' . http_build_query($newRequest));
+        evo()->sendRedirect(UrlProcessor::makeUrl($this->serviceId, '', '', 'full') . '?' . http_build_query($newRequest));
     }
 }

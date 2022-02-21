@@ -2,26 +2,18 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Managers;
 
-use EvolutionCMS\Main\Services\GovPay\Calculators\FinalPaymentCalculator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IAfterConfirmExecutable;
-use EvolutionCMS\Main\Services\GovPay\Factories\Calculators\CommissionsCalculatorFactory as CommissionsCalculatorFactoryAlias;
-use EvolutionCMS\Main\Services\GovPay\Factories\Recipients\BankRecipientDtoFactory;
-use EvolutionCMS\Main\Services\GovPay\Factories\Recipients\GovPayRecipientDtoFactory;
 use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
-use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusReady;
 use EvolutionCMS\Main\Services\GovPay\Statuses\StatusSuccess;
 use Exception;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 
 class ServiceManager
 {
-
-
     public function renderForm($serviceId): string
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
@@ -39,11 +31,11 @@ class ServiceManager
         $serviceFactory->getDataValidator()->validate($formData);
     }
 
-    public function getCommission(int $serviceId): array
+    public function getCommission(int $serviceId, int $subServiceId = 0): array
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
 
-        return $serviceFactory->getCommissionsManager()->getCommissions();
+        return $serviceFactory->getCommissionsManager()->getCommissions($subServiceId);
     }
 
     public function renderPreview(int $serviceId, array $requestData): string
@@ -58,33 +50,16 @@ class ServiceManager
     public function createOder(int $serviceId, array $formData): ServiceOrder
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($serviceId);
-        $finalPaymentCalculator = new FinalPaymentCalculator($serviceId);
 
-        $formConfigurator = $serviceFactory->getFormConfigurator();
-        $paymentRecipientGenerator = $serviceFactory->getPaymentRecipientsGenerator();
-        $commissionsCalculator = CommissionsCalculatorFactoryAlias::build();
+        $serviceOrderGenerator = $serviceFactory->getOrderGenerator();
 
-        $formFieldsValues = $formConfigurator->getFormFieldsValues($formData);
-
-        $this->validate($serviceId, $formFieldsValues);
-
-        $paymentRecipients = $paymentRecipientGenerator->getPaymentRecipients($formFieldsValues);
-        $paymentAmountDto = $finalPaymentCalculator->calculate($formFieldsValues);
-
-        $commissions = $commissionsCalculator->calculate($paymentAmountDto);
-
-        $paymentRecipients[] = BankRecipientDtoFactory::build($commissions->getBankCommission(), $formFieldsValues);
-        $paymentRecipients[] = GovPayRecipientDtoFactory::build($commissions->getProfit(), $formFieldsValues);
-
-
-        $serviceOrder = ServiceOrder::new($serviceId, $formFieldsValues, $paymentAmountDto, $commissions);
-
-        foreach ($paymentRecipients as $paymentRecipientDto) {
-            PaymentRecipient::new($serviceOrder->id, $paymentRecipientDto);
-        }
-        return $serviceOrder;
+        return $serviceOrderGenerator->createOder($formData);
     }
 
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws Exception
+     */
     public function updateLiqPayPaymentStatus($serviceOrderId, $paymentData)
     {
         $statusChanger = new StatusManager();
@@ -135,7 +110,6 @@ class ServiceManager
         return false;
     }
 
-
     public function generateInvoiceHtmlFile($invoiceHtml, $orderHash): string
     {
         $invoiceFileHtml = 'assets/files/invoices/' . $orderHash . '.html';
@@ -171,6 +145,9 @@ class ServiceManager
     }
 
 
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function executePaidServiceOrders()
     {
         $confirmedServiceOrders = ServiceOrder::getPaidServiceOrders();
@@ -180,6 +157,9 @@ class ServiceManager
         }
     }
 
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function completedServiceOrders()
     {
         $confirmedServiceOrders = ServiceOrder::getSubmittedServiceOrders();
@@ -216,6 +196,10 @@ class ServiceManager
         (new StatusManager())->change(StatusReady::getKey(),$confirmedServiceOrder);
     }
 
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws Exception
+     */
     public function executeServiceOrder(ServiceOrder $confirmedServiceOrder)
     {
         $serviceFactory = ServiceFactory::makeFactoryForService($confirmedServiceOrder->service_id);
