@@ -27,28 +27,28 @@ class PaymentRecipientDto
     }
 
 
-    public function getRecipientName()
+    public function getRecipientName(): string
     {
         return $this->recipientName;
     }
 
-    public function getRecipientBankName()
+    public function getRecipientBankName(): string
     {
         return $this->recipientBankName;
     }
 
 
-    public function getPurpose()
+    public function getPurpose(): string
     {
         return $this->purpose;
     }
 
-    public function getRecipientType()
+    public function getRecipientType(): string
     {
         return $this->recipientType;
     }
 
-    public function getServiceName()
+    public function getServiceName(): string
     {
         return $this->serviceName;
     }
@@ -77,18 +77,18 @@ class PaymentRecipientDto
         $this->serviceName = $serviceName;
     }
 
-    private $edrpou;
-    private $account;
-    private $mfo;
-    private $amount;
+    private string $edrpou='';
+    private string $account='';
+    private string $mfo='';
+    private float $amount;
 
 
-    private $recipientName;
-    private $recipientBankName;
-    private $purpose;
+    private string $recipientName='';
+    private string $recipientBankName='';
+    private string $purpose='';
 
-    private $recipientType;
-    private $serviceName;
+    private string $recipientType='';
+    private string $serviceName='';
 
     public function __construct(string $edrpou, string $account, string $mfo, float $amount)
     {
