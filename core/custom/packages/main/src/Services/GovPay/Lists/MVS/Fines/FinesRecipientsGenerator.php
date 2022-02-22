@@ -6,14 +6,22 @@ use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
 use EvolutionCMS\Main\Services\FinesSearcher\Models\Fine;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
+use Exception;
 
 class FinesRecipientsGenerator implements IRecipientsGenerator
 {
+    /**
+     * @throws Exception
+     */
     public function getPaymentRecipients($formFieldsValues): array
     {
         $fine = Fine::findOrFail($formFieldsValues['fine_id']);
 
         $paidInfo = json_decode($fine->data['paidinfo'],true);
+
+        if(empty($paidInfo)){
+            throw new Exception('Fines paid-info is empty');
+        }
 
         $recipientName  = $paidInfo['bank_name'].'/'.$paidInfo['kkvd_id'];
 
