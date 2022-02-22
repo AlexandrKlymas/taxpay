@@ -2,6 +2,7 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage;
 
+use EvolutionCMS\Main\Services\GovPay\Decorators\RecipientListDecorator;
 use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\TotalCaptionField;
 use EvolutionCMS\Main\Services\GovPay\Fields\FullNameField;
@@ -9,6 +10,7 @@ use EvolutionCMS\Main\Services\GovPay\Fields\HiddenStaticSumField;
 use EvolutionCMS\Main\Services\GovPay\Fields\HiddenTextField;
 use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
+use EvolutionCMS\Main\Services\GovPay\Models\ServiceRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\SubServices;
 
 class MarriageFormConfigurator extends BaseFormConfigurator
@@ -19,10 +21,22 @@ class MarriageFormConfigurator extends BaseFormConfigurator
     {
         $registryOfficeId = $_SESSION['fields_data']['registry_office']??0;
         unset($_SESSION['fields_data']);
+        $sum = 0.00;
+        $total = 0.00;
 
-        $paymentAmountDto = ServiceFactory::makeFactoryForService($this->serviceId)
-            ->getFinalCalculator()
-            ->calculate(['registry_office'=>$registryOfficeId]);
+        if(!empty($registryOfficeId)){
+
+            $formData = ['registry_office'=>$registryOfficeId];
+
+            $paymentAmountDto = ServiceFactory::makeFactoryForService($this->serviceId)
+                ->getCommissionsManager()
+                ->getRecipientListDecorator($formData)
+                ->getAmountDto();
+
+            $sum = $paymentAmountDto->getSum();
+            $total = $paymentAmountDto->getTotal();
+        }
+
 
         return [
             new LayoutFields([
@@ -34,8 +48,8 @@ class MarriageFormConfigurator extends BaseFormConfigurator
             ]),
 
             new LayoutFields([
-                HiddenStaticSumField::buildField($paymentAmountDto->getSum()),
-                TotalCaptionField::build('До сплати',$paymentAmountDto->getTotal())
+                HiddenStaticSumField::buildField($sum),
+                TotalCaptionField::build('До сплати',$total)
             ])
 
         ];
