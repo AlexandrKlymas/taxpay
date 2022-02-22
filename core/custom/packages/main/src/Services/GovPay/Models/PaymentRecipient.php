@@ -77,7 +77,7 @@ class PaymentRecipient extends Eloquent
     {
         if(empty($paymentRecipientDto->getRecipientBankName())){
             $bank = BankItem::where('mfo',$paymentRecipientDto->getMfo())->first();
-            $paymentRecipientDto->setRecipientBankName($bank->name);
+            $paymentRecipientDto->setRecipientBankName($bank->name??'');
         }
         return self::create([
             'service_order_id' => $serviceOrderId,
