@@ -5,6 +5,7 @@ namespace EvolutionCMS\Main\Services\GovPay\Decorators;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFeeCalculator;
 use EvolutionCMS\Main\Services\GovPay\Dto\CommissionDto;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentAmountDto;
+use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use Illuminate\Database\Eloquent\Collection;
 
 class RecipientListDecorator
@@ -13,9 +14,14 @@ class RecipientListDecorator
 
     public function __construct(Collection $recipients, IFeeCalculator $feeCalculator, array $formData)
     {
-        foreach ($recipients as $recipient){
-            $this->addRecipient(new RecipientDecorator($recipient,$feeCalculator,$formData));
+        foreach ($recipients as $recipient) {
+            $this->addRecipient(new RecipientDecorator($recipient, $feeCalculator, $formData));
         }
+    }
+
+    public function getRecipientList(): array
+    {
+        return $this->recipients;
     }
 
     public function addRecipient(RecipientDecorator $recipient)
@@ -30,7 +36,7 @@ class RecipientListDecorator
         $sum = 0.00;
         $serviceFee = 0.00;
 
-        foreach($this->recipients as $recipient){
+        foreach ($this->recipients as $recipient) {
             $sum += $recipient->getSum();
             $gp += $recipient->getGP();
             $tk += $recipient->getTK();
@@ -41,7 +47,7 @@ class RecipientListDecorator
 
         $liqPayCommission = $this->calcLiqPayCommission($total);
 
-        return  new PaymentAmountDto($sum,$serviceFee,$total+$liqPayCommission);
+        return new PaymentAmountDto($sum, $serviceFee, $total + $liqPayCommission);
     }
 
     public function getCommissionDto(): CommissionDto
@@ -50,7 +56,7 @@ class RecipientListDecorator
         $gp = 0.00;
         $sum = 0.00;
 
-        foreach($this->recipients as $recipient){
+        foreach ($this->recipients as $recipient) {
             $sum += $recipient->getSum();
             $gp += $recipient->getGP();
             $tk += $recipient->getTK();
@@ -60,15 +66,15 @@ class RecipientListDecorator
 
         $liqPayCommission = $this->calcLiqPayCommission($total);
 
-        return  new CommissionDto($liqPayCommission,$tk,$gp);
+        return new CommissionDto($liqPayCommission, $tk, $gp);
     }
 
     public function getRecipientsDtoList(): array
     {
         $dtoList = [];
 
-        foreach ($this->recipients as $recipient){
-            $dtoList = array_merge($dtoList, $recipient->getRecipientDto());
+        foreach ($this->recipients as $recipient) {
+            $dtoList = array_merge($dtoList, $recipient->getRecipientDtoList());
         }
 
         return $dtoList;
@@ -87,5 +93,18 @@ class RecipientListDecorator
         }
 
         return $liqPayCommissionAutoCalculated;
+    }
+
+    public function loadChecks(ServiceOrder $serviceOrder)
+    {
+        $mainRecipients = $serviceOrder->mainRecipients;
+        foreach ($mainRecipients as $mainRecipient) {
+            foreach ($this->recipients as $recipientDecorator) {
+                $recipient = $recipientDecorator->getRecipient();
+                if ($mainRecipient->amount == $recipient->sum && $mainRecipient->account == $recipient->iban) {
+                    $recipientDecorator->setCheckId($mainRecipient->check_id);
+                }
+            }
+        }
     }
 }

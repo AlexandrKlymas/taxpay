@@ -4,6 +4,7 @@ namespace EvolutionCMS\Main\Services\GovPay\Decorators;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFeeCalculator;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
+use EvolutionCMS\Main\Services\GovPay\Models\BankItem;
 use EvolutionCMS\Main\Services\GovPay\Models\CommissionsRecipients;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceCommission;
@@ -20,6 +21,7 @@ class RecipientDecorator
 
     protected array $formData;
 
+    protected string $checkId;
     protected string $_tk;
     protected string $_gp;
     protected float $liqPayCommission = 0.00;
@@ -52,8 +54,6 @@ class RecipientDecorator
         $this->calcTK();
         $this->calcGP();
 
-
-
         return $this;
     }
 
@@ -80,6 +80,16 @@ class RecipientDecorator
     public function getLiqPayCommission():float
     {
         return $this->liqPayCommission;
+    }
+
+    public function getCheckId(): string
+    {
+        return $this->checkId;
+    }
+
+    public function setCheckId(string $checkId)
+    {
+        $this->checkId = $checkId;
     }
 
     protected function calcLiqPayCommission(): float
@@ -120,7 +130,22 @@ class RecipientDecorator
         )->calculate($this->sum);
     }
 
-    public function getRecipientDto(): array
+    protected function getBankNameByMfo(int $mfo):string
+    {
+        return BankItem::where('mfo',$mfo)->first()->name;
+    }
+
+    public function getRecipientBankName():string
+    {
+        return $this->getBankNameByMfo($this->recipient->mfo);
+    }
+
+    public function getRecipient(): ServiceRecipient
+    {
+        return $this->recipient;
+    }
+
+    public function getRecipientDtoList(): array
     {
         $paymentMainRecipientsDto = new PaymentRecipientDto(
             $this->recipient->edrpou,
@@ -130,6 +155,7 @@ class RecipientDecorator
         );
 
         $paymentMainRecipientsDto->setRecipientName($this->recipient->recipient_name);
+        $paymentMainRecipientsDto->setRecipientBankName($this->getBankNameByMfo($this->recipient->mfo));
         $paymentMainRecipientsDto->setRecipientType(PaymentRecipient::RECIPIENT_TYPE_MAIN);
         $paymentMainRecipientsDto->setPurpose(PurposeHelpers::parse($this->recipient->purpose_template,$this->formData));
         $dtoList[] = $paymentMainRecipientsDto;
@@ -142,6 +168,7 @@ class RecipientDecorator
             $this->gp
         );
         $paymentGPRecipientsDto->setRecipientName($gpCommission['recipient']['recipient_name']);
+        $paymentGPRecipientsDto->setRecipientBankName($this->getBankNameByMfo($gpCommission['recipient']['mfo']));
         $paymentGPRecipientsDto->setRecipientType($this->_gp);
         $paymentGPRecipientsDto->setPurpose(PurposeHelpers::parse($gpCommission['recipient']['purpose_template'],$this->formData));
         $dtoList[] = $paymentGPRecipientsDto;
@@ -154,6 +181,7 @@ class RecipientDecorator
             $this->tk
         );
         $paymentTKRecipientsDto->setRecipientName($tkCommissions['recipient']['recipient_name']);
+        $paymentTKRecipientsDto->setRecipientBankName($this->getBankNameByMfo($tkCommissions['recipient']['mfo']));
         $paymentTKRecipientsDto->setRecipientType($this->_tk);
         $paymentTKRecipientsDto->setPurpose(PurposeHelpers::parse($tkCommissions['recipient']['purpose_template'],$this->formData));
         $dtoList[] = $paymentTKRecipientsDto;
