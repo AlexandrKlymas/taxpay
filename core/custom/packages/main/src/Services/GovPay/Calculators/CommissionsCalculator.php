@@ -24,7 +24,7 @@ class CommissionsCalculator
      */
     private float $bankMinCommission;
 
-    public function __construct(float $liqPayCommissionPercent,float $liqPayMinCommission, float $bankCommissionPercent, float $bankMinCommission)
+    public function __construct(float $liqPayCommissionPercent, float $liqPayMinCommission, float $bankCommissionPercent, float $bankMinCommission)
     {
         $this->liqPayCommissionPercent = $liqPayCommissionPercent;
         $this->liqPayMinCommission = $liqPayMinCommission;
@@ -38,7 +38,8 @@ class CommissionsCalculator
      */
     public function calculate(PaymentAmountDto $paymentAmountDto): CommissionDto
     {
-        $liqPayCommissionAutoCalculated = round($paymentAmountDto->getTotal() * $this->liqPayCommissionPercent / 100,2);
+        $liqPayCommissionAutoCalculated =
+            round($paymentAmountDto->getTotal() * $this->liqPayCommissionPercent / 100, 2);
 
         $bankCommission = round($paymentAmountDto->getSum() * $this->bankCommissionPercent / 100, 2);
 
@@ -50,8 +51,8 @@ class CommissionsCalculator
             $liqPayCommissionAutoCalculated = $this->liqPayMinCommission;
         }
 
-        $profit = round($paymentAmountDto->getServiceFee() - $liqPayCommissionAutoCalculated - $bankCommission,2);
+        $profit = round($paymentAmountDto->getServiceFee() - $liqPayCommissionAutoCalculated - $bankCommission, 2);
 
-        return new CommissionDto($liqPayCommissionAutoCalculated,$bankCommission,$profit);
+        return new CommissionDto($liqPayCommissionAutoCalculated, $bankCommission, $profit);
     }
 }
