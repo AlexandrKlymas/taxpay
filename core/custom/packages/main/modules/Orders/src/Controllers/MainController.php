@@ -51,7 +51,7 @@ class MainController extends BaseController
             165 => 'Податковий збір',
             170 => 'ПЛР-тест',
         ];
-        $services = SiteContent::active()->whereIn('template', [5,11,16,17,18])->get()->toArray();
+        $services = SiteContent::active()->whereIn('template', [5,11,16,17,18,19])->get()->toArray();
 
         $serviceList = [];
         foreach ($services as $service) {
