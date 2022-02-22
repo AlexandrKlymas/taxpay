@@ -3,8 +3,6 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\ICommissionsManager;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFeeCalculator;
-use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFinalCalculator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IOrderGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IRecipientsGenerator;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
@@ -36,11 +34,6 @@ class MarriageFactory extends BaseServiceFactory
     public function getCommissionsManager(): ICommissionsManager
     {
         return $this->container->make(MarriageCommissionsManager::class,$this->dependencies);
-    }
-
-    public function getFinalCalculator(): IFinalCalculator
-    {
-        return $this->container->make(MarriageFinalCalculator::class,$this->dependencies);
     }
 
     public function getOrderGenerator(): IOrderGenerator
