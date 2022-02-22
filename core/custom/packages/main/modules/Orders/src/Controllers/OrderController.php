@@ -9,6 +9,7 @@ use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Models\SiteContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use PHPMailer\PHPMailer\Exception;
 use View;
 use function Symfony\Component\String\b;
 
@@ -50,10 +51,15 @@ class OrderController extends BaseController
     }
 
 
-    public function makePdf(Request $request){
+    /**
+     * @throws Exception
+     */
+    public function makePdf(Request $request): array
+    {
         $serviceOrder = ServiceOrder::find($request->get('orderId'));
 
         $serviceManager = new ServiceManager();
+
         $serviceManager->generateInvoice($serviceOrder->id,true);
 
         return [
@@ -61,7 +67,8 @@ class OrderController extends BaseController
         ];
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request): array
+    {
         ServiceOrder::findOrFail($request->toArray()['id'])->delete();
 
         return [
@@ -69,9 +76,8 @@ class OrderController extends BaseController
         ];
 
     }
-    public function save(Request $request){
-
-
+    public function save(Request $request): array
+    {
         try {
             $this->trySave($request);
             return [

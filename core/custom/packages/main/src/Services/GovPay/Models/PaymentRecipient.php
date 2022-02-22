@@ -2,9 +2,12 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Models;
 
-
+use Eloquent;
 use EvolutionCMS\Main\Services\GovPay\Dto\PaymentRecipientDto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient
@@ -22,30 +25,31 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $recipient_type
  * @property string|null $service_name
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient query()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereAccount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereCheckId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereEdrpou($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereMfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient wherePurpose($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereRecipientBankName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereRecipientName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereRecipientType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereServiceName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereServiceOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentRecipient whereUpdatedAt($value)
- * @property-read \EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder $serviceOrder
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|PaymentRecipient newModelQuery()
+ * @method static Builder|PaymentRecipient newQuery()
+ * @method static Builder|PaymentRecipient query()
+ * @method static Builder|PaymentRecipient whereAccount($value)
+ * @method static Builder|PaymentRecipient whereAmount($value)
+ * @method static Builder|PaymentRecipient whereCheckId($value)
+ * @method static Builder|PaymentRecipient whereCreatedAt($value)
+ * @method static Builder|PaymentRecipient whereEdrpou($value)
+ * @method static Builder|PaymentRecipient whereId($value)
+ * @method static Builder|PaymentRecipient whereMfo($value)
+ * @method static Builder|PaymentRecipient wherePurpose($value)
+ * @method static Builder|PaymentRecipient whereRecipientBankName($value)
+ * @method static Builder|PaymentRecipient whereRecipientName($value)
+ * @method static Builder|PaymentRecipient whereRecipientType($value)
+ * @method static Builder|PaymentRecipient whereServiceName($value)
+ * @method static Builder|PaymentRecipient whereServiceOrderId($value)
+ * @method static Builder|PaymentRecipient whereStatus($value)
+ * @method static Builder|PaymentRecipient whereUpdatedAt($value)
+ * @property-read ServiceOrder $serviceOrder
+ * @mixin Eloquent
  */
-class PaymentRecipient extends \Eloquent
+
+class PaymentRecipient extends Eloquent
 {
 
     const STATUS_WAIT = 'wait';
@@ -64,15 +68,17 @@ class PaymentRecipient extends \Eloquent
         'amount'=>'float'
     ];
 
-    public function serviceOrder()
+    public function serviceOrder(): BelongsTo
     {
         return $this->belongsTo(ServiceOrder::class);
     }
 
-
-
     public static function new(int $serviceOrderId, PaymentRecipientDto $paymentRecipientDto)
     {
+        if(empty($paymentRecipientDto->getRecipientBankName())){
+            $bank = BankItem::where('mfo',$paymentRecipientDto->getMfo())->first();
+            $paymentRecipientDto->setRecipientBankName($bank->name);
+        }
         return self::create([
             'service_order_id' => $serviceOrderId,
             'edrpou' =>  $paymentRecipientDto->getEdrpou(),
@@ -90,7 +96,8 @@ class PaymentRecipient extends \Eloquent
         ]);
     }
 
-    public static function generateUniqueCheck(){
+    public static function generateUniqueCheck(): string
+    {
         $rand = '';
         for($i=1;$i<=16;$i++){
             $rand .= rand(0,9);
@@ -100,9 +107,6 @@ class PaymentRecipient extends \Eloquent
         }
         return $rand;
     }
-
-
-
 
     public static function getTypes(): array
     {
@@ -120,22 +124,23 @@ class PaymentRecipient extends \Eloquent
             self::STATUS_FINISHED => 'Завершен',
         ];
     }
-    public function isFinished(){
+    public function isFinished(): bool
+    {
         return $this->status === self::STATUS_FINISHED;
     }
 
     /**
-     * @return PaymentRecipient[]|Collection
+     * @return Collection|PaymentRecipient[]
      */
-    public static function getConfirmedPayments(){
+    public static function getConfirmedPayments()
+    {
         return self::query()->where('status',self::STATUS_CONFIRMED)->get();
     }
 
-    public function isMainRecipient()
+    public function isMainRecipient(): bool
     {
         return $this->recipient_type === self::RECIPIENT_TYPE_MAIN;
     }
-
 
     public function canChangeStatusToFinished():bool
     {
@@ -150,9 +155,6 @@ class PaymentRecipient extends \Eloquent
         $this->save();
     }
 
-
-
-
     public function changeStatusToConfirmed(){
         if(!$this->canChangeStatusToConfirmed()){
             throw new \DomainException('Can not change status to confirmed');
@@ -162,11 +164,8 @@ class PaymentRecipient extends \Eloquent
         $this->save();
     }
 
-
     public function canChangeStatusToConfirmed():bool
     {
         return $this->status === self::STATUS_WAIT;
     }
-
-
 }

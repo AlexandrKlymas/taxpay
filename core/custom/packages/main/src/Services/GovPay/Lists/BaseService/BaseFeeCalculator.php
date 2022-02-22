@@ -21,12 +21,14 @@ class BaseFeeCalculator implements IFeeCalculator
         $this->setCommission();
     }
 
-    public function setCommission(float $percent = 0.00, float $min = 0.00, float $max = 0.00, float $fix = 0.00)
+    public function setCommission(float $percent = 0.00, float $min = 0.00, float $max = 0.00, float $fix = 0.00): BaseFeeCalculator
     {
         $this->fix = $fix;
         $this->percent = $percent;
         $this->min = $min;
         $this->max = $max;
+
+        return $this;
     }
 
     public function calculate(float $sum): float

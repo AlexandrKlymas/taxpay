@@ -3,7 +3,7 @@
 @section('content')
 
 
-    <h1>{{ $documentObject['pagetitle'] }} {{$medical_center_name}}</h1>
+    <h1>{{ $documentObject['pagetitle'] }} {{$registry_office_name}}</h1>
 
     <div id="service-steps">
         <div class="row payment-services">

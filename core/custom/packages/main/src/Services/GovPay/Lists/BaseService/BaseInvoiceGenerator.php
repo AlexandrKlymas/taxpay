@@ -3,20 +3,22 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IInvoiceGenerator;
+use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
-use Illuminate\Contracts\View\View;
 
 class BaseInvoiceGenerator implements IInvoiceGenerator
 {
+    protected IServiceFactory $serviceFactory;
 
-    public function generate(ServiceOrder $serviceOrder): View
+    public function __construct(IServiceFactory $serviceFactory)
+    {
+        $this->serviceFactory = $serviceFactory;
+    }
+
+    public function generate(ServiceOrder $serviceOrder):string
     {
         $invoices = '';
         $recipients = $serviceOrder->mainRecipients;
-
-        evo()->invokeEvent('OnCheckFound',[
-            'service_order'=>$serviceOrder,
-        ]);
 
         foreach ($recipients as $recipient) {
 

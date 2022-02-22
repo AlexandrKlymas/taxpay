@@ -6,5 +6,5 @@ use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 
 interface IInvoiceGenerator
 {
-    public function generate(ServiceOrder $serviceOrder);
+    public function generate(ServiceOrder $serviceOrder):string;
 }

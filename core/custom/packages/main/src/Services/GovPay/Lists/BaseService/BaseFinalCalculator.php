@@ -12,8 +12,8 @@ class BaseFinalCalculator implements IFinalCalculator
 {
     protected int $serviceId;
     protected IServiceFactory $serviceFactory;
-    private IPaymentCalculator $paymentCalculator;
-    private IFeeCalculator $serviceFeeCalculator;
+    protected IPaymentCalculator $paymentCalculator;
+    protected IFeeCalculator $serviceFeeCalculator;
 
     public function __construct(IServiceFactory $serviceFactory)
     {
@@ -23,7 +23,7 @@ class BaseFinalCalculator implements IFinalCalculator
         $this->serviceFeeCalculator = $this->serviceFactory->getFeeCalculator();
     }
 
-    public function calculate($formData): PaymentAmountDto
+    public function calculate(array $formData): PaymentAmountDto
     {
         $commissions = $this->serviceFactory->getCommissionsManager()->getCommissions()['total'];
         if(!empty($commissions)){

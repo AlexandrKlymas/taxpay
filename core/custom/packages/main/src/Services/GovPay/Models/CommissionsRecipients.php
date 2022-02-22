@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
  * @property string $mfo
  * @property string $iban
  * @property string $purpose_template
+ * @property string $recipient_type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  **/
@@ -28,5 +29,6 @@ class CommissionsRecipients extends Model
         'mfo',
         'iban',
         'purpose_template',
+        'recipient_type',
     ];
 }

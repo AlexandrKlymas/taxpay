@@ -56,20 +56,10 @@ function add_service_recipient_commission() {
 
 function edit_service_recipient() {
     let $form = $('#edit_service_recipient');
-    $.post(module_url+'&action=edit_service_recipient', $form.serialize())
+    $.post(module_url+'&action=edit_service_recipient_edit', $form.serialize())
         .done(function (data) {
             location.reload();
         });
-}
-
-function edit_service_commission(id,field,value) {
-    let new_value = prompt('Задайте нове значення', value);
-    if (new_value !== null) {
-        $.post(module_url+'&action=edit_service_commission', {id: id, field:field, value: new_value})
-            .done(function (data) {
-                location.reload();
-            });
-    }
 }
 
 function delete_service_recipient(id) {
@@ -82,6 +72,21 @@ function delete_service_recipient(id) {
     }
 }
 
+function edit_service_recipient_commission(id){
+    let $form = $('#edit-commission-form-percent-'+id+'-form');
+    $.post(module_url+'&action=edit_service_recipient_commission', $form.serialize())
+        .done(function (data) {
+            location.reload();
+        });
+}
+
+function delete_service_recipient_commission(id){
+    $.post(module_url+'&action=delete_service_recipient_commission', {id: id})
+        .done(function (data) {
+            location.reload();
+        });
+}
+
 function edit_commissions_recipients(id){
     let $form = $('#edit_commissions_recipients_form-'+id);
     $.post(module_url+'&action=edit_service_recipient', $form.serialize())
@@ -89,6 +94,7 @@ function edit_commissions_recipients(id){
             location.reload();
         });
 }
+
 function delete_commission_recipient(id){
     let name = $('#edit_commissions_recipients_form-'+id+'-recipient_name').val()
     if (confirm('Ви насправді бажаєте видалити "' + name + '"?')) {

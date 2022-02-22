@@ -21,5 +21,18 @@
         <input id="add_service_commission_recipient_form-purpose_template" type="text" name="purpose_template">
     </div>
 
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="add_service_commission_recipient_form-recipient_type">
+                Тип отримувача</label>
+        </div>
+        <select class="custom-select" name="recipient_type" id="add_service_commission_recipient_form-recipient_type">
+            <option selected>Оберіть...</option>
+            @foreach($recipient_types as $recipient_type)
+                <option value="{{$recipient_type}}">{{$recipient_type}}</option>
+            @endforeach
+        </select>
+    </div>
+
     <button class="btn btn-success" type="submit">Додати нового отримувача комісії</button>
 </form>
