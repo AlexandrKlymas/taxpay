@@ -54,7 +54,9 @@
         <div class="row">
             @foreach($service_commissions as $service_commission)
                 <div class="col-4">
-                    <form class="border border-primary p-3" id="edit-commission-form-percent-{{$service_commission['id']}}-form">
+                    <form class="border border-primary p-3" onsubmit="edit_service_recipient_commission({{$service_commission['id']}});return false;"
+                          id="edit-commission-form-percent-{{$service_commission['id']}}-form">
+                        <input type="hidden" name="id" value="{{$service_commission['id']}}">
                         <div class="form-row">
                             <div class="col">
                                 <label for="edit-commission-form-recipient_name-{{$service_commission['id']}}">Назва</label>
@@ -94,11 +96,15 @@
                                        value="{{$service_commission['fix']}}"
                                        placeholder="0.00" type="text" name="fix">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="col">
                                 <button class="btn btn-success mt-3 w-100" type="submit"><i class="fa fa-edit"></i> Зберегти зміни</button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-danger mt-3 w-100" type="button"><i class="fa fa-remove"></i> Видалити комісію</button>
+                                <button class="btn btn-danger mt-3 w-100"
+                                        onclick="delete_service_recipient_commission({{$service_commission['id']}})"
+                                        type="button"><i class="fa fa-remove"></i> Видалити комісію</button>
                             </div>
                         </div>
                     </form>

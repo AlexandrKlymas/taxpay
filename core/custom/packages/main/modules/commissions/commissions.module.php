@@ -112,16 +112,23 @@ switch ($action) {
             ]);
         exit();
 
-    case 'edit_service_commission':
-        ServiceCommission::where('id',$_POST['id'])
+    case 'edit_service_recipient_edit':
+        ServiceRecipient::where('id',$_POST['id'])
             ->update([
-                $_POST['field']=>$_POST['value']
+                'recipient_name'=>$_POST['recipient_name'],
+                'edrpou'=>$_POST['edrpou'],
+                'mfo'=>$_POST['mfo'],
+                'iban'=>$_POST['iban'],
+                'purpose_template'=>$_POST['purpose_template'],
+                'sum'=>$_POST['sum'],
             ]);
         exit();
+
     case 'delete_service_recipient':
         ServiceRecipient::find($_POST['id'])->delete();
         ServiceCommission::where('service_recipient_id',$_POST['id'])->delete();
         exit();
+
     case 'add_service_recipient_commission':
         ServiceCommission::create([
             'service_recipient_id'=>$_POST['service_recipient_id'],
@@ -132,6 +139,18 @@ switch ($action) {
             'fix'=>$_POST['fix'],
         ]);
         exit();
+    case 'edit_service_recipient_commission':
+        ServiceCommission::where('id',$_POST['id'])->update([
+            'percent'=>$_POST['percent'],
+            'min'=>$_POST['min'],
+            'max'=>$_POST['max'],
+            'fix'=>$_POST['fix'],
+        ]);
+        exit();
+    case 'delete_service_recipient_commission':
+        ServiceCommission::where('id',$_POST['id'])->delete();
+        exit();
+
     case 'service_recipient':
     case 'sub_service_recipient':
         $data['service_recipient'] = ServiceRecipient::find($_GET['service_recipient_id'])->toArray();
