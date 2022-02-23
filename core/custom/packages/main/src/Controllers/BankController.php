@@ -2,6 +2,10 @@
 
 namespace EvolutionCMS\Main\Controllers;
 
+use EvolutionCMS\Main\Services\PaymentsToBankSender\Exceptions\FileNotPutException;
+use EvolutionCMS\Main\Services\PaymentsToBankSender\PaymentsSender;
+use EvolutionCMS\Main\Services\PaymentsToBankSender\ProcessedPaymentChecker;
+use PHPMailer\PHPMailer\Exception;
 
 class BankController
 {
@@ -12,22 +16,28 @@ class BankController
         }
     }
 
-
-    public function import()
+    /**
+     * @throws Exception
+     */
+    public function import(): string
     {
         $params = [];
         if(isset($_GET['day-type'])){
             $params[] = $_GET['day-type'];
         }
         evo()->logEvent(123,1,'Начало выгрузки в банк, количество транзакция ','Ручной BankImport');
-        (new \EvolutionCMS\Main\Services\PaymentsToBankSender\ProcessedPaymentChecker(...$params))->getProcessedPaymentsAndCheck();
+        (new ProcessedPaymentChecker(...$params))->getProcessedPaymentsAndCheck();
         return 'ok';
     }
 
-    public function export()
+    /**
+     * @throws Exception
+     * @throws FileNotPutException
+     */
+    public function export(): string
     {
         evo()->logEvent(123,1,'Начало выгрузки в банк, количество транзакция ','Ручной BankExport');
-        (new \EvolutionCMS\Main\Services\PaymentsToBankSender\PaymentsSender())->sendConfirmedPaymentsToBank();
+        (new PaymentsSender())->sendConfirmedPaymentsToBank();
         return 'ok';
     }
 }
