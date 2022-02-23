@@ -49,6 +49,9 @@
     @include('pwa::pwa')
 </head>
 <body {!! $config['site_start'] == $documentObject['id'] ?'class="main-page"':'' !!}>
+
+{!! evo()->getConfig('g_start_body') !!}
+
 @yield('base_content')
 
     <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
