@@ -2,28 +2,23 @@
 
 namespace EvolutionCMS\Main\Modules\Orders\Controllers;
 
-
 use EvolutionCMS\Main\Modules\Orders\OrdersModuleHelper;
-use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
 use EvolutionCMS\Main\Services\GovPay\Managers\StatusManager;
 use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use EvolutionCMS\Main\Support\Helpers;
 use EvolutionCMS\Models\SiteContent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use View;
 
 class MainController extends BaseController
 {
-
-
     /**
      * @var OrdersModuleHelper
      */
-    private $ordersModuleHelper;
+    private OrdersModuleHelper $ordersModuleHelper;
 
     public function __construct()
     {
@@ -32,10 +27,8 @@ class MainController extends BaseController
         $this->ordersModuleHelper = new OrdersModuleHelper();
     }
 
-
     public function index(Request $request)
     {
-
         $serviceCustomTitles = [
             26 => 'Поліція охорони',
             47 => 'Штрафи',
@@ -61,7 +54,6 @@ class MainController extends BaseController
             ];
         }
 
-
         $statuses = (new StatusManager())->getStatuses();
         $sortStatuses = [];
 
@@ -78,19 +70,15 @@ class MainController extends BaseController
         $data = [
             'services' => $serviceList,
             'statuses' => $sortStatuses,
-
             'recipient_statuses' => Helpers::arrayTransformoWebixOptions(PaymentRecipient::getStatuses()),
             'recipient_types' => Helpers::arrayTransformoWebixOptions(PaymentRecipient::getTypes()),
-
-
         ];
+
         return View::make('Modules.Orders::index', array_merge($this->viewData, $data))->render();
     }
 
-
-    public function prepareData(ServiceOrder $order)
+    public function prepareData(ServiceOrder $order): array
     {
-
         return [
             'id' => $order->id,
             'time' => microtime(),
@@ -100,8 +88,6 @@ class MainController extends BaseController
             'liqpay_status' => $order->liqpay_status,
             'liqpay_transaction_id' => $order->liqpay_transaction_id,
             'liqpay_payment_date' => $order->liqpay_payment_date ? $order->liqpay_payment_date->format('d-m-Y H:i:s') : '',
-
-
 
             'full_name' => $order->full_name,
             'phone' => $order->phone,
@@ -117,10 +103,9 @@ class MainController extends BaseController
         ];
     }
 
-    public function loadOrder(Request $request)
+    public function loadOrder(Request $request): array
     {
         $q = ServiceOrder::where('service_orders.id',$request->get('orderId'));
-
 
         $q->select(['service_orders.*','payment_recipients.recipient_name']);
         $q->join('payment_recipients',function ($join){
@@ -133,22 +118,21 @@ class MainController extends BaseController
         $serviceOrder = $q->first();
 
         $data = $this->prepareData($serviceOrder);
+
         return [
             'status' => 'success',
             'data' => $data
         ];
     }
 
-    public function loadOrders(Request $request)
+    public function loadOrders(Request $request): array
     {
-
         $perPage = 15;
         $page = 1;
 
         if ($_GET['start']) {
             $page = (int)$_GET['start'] / $perPage + 1;
         }
-
 
         $q = ServiceOrder::query();
 
@@ -159,23 +143,21 @@ class MainController extends BaseController
                 ->limit(1);
         });
 
-        $archive = ServiceOrder::select(['id'])
-            ->whereIn('service_orders.status',['wait','error','failure'])
-            ->where('service_orders.created_at','<',date('Y-m-d H:i:s',strtotime('-1 day')))
-            ->get()
-        ;
-
-        $q->whereNotIn('service_orders.id', array_column($archive->toArray(),'id')??[]);
+//        $archive = ServiceOrder::select(['id'])
+//            ->whereIn('service_orders.status',['wait','error','failure'])
+//            ->where('service_orders.created_at','<',date('Y-m-d H:i:s',strtotime('-1 day')))
+//            ->get()
+//        ;
+//
+//        $q->whereNotIn('service_orders.id', array_column($archive->toArray(),'id')??[]);
 
         $q = $this->ordersModuleHelper->insertFilterRulesToQuery($request, $q);
         $q = $this->ordersModuleHelper->insertSortRulesToQuery($request, $q);
-
 
         $q->orderBy('service_orders.id', 'desc');
         $orderPaginate = $q->paginate($perPage, $columns = ['*'], $pageName = 'page', $page);
         /** @var ServiceOrder[] $orders */
         $orders = $orderPaginate->items();
-
 
         $data = [];
         foreach ($orders as $order) {
@@ -192,13 +174,12 @@ class MainController extends BaseController
         } else {
             $response['pos'] = $_GET['start'];
         }
+
         return $response;
     }
 
-
     public function exportToExcel(Request $request)
     {
-
         $ids = [];
         if ($request->get('checked')) {
             $ids = explode(',', $request->get('checked'));
@@ -217,7 +198,6 @@ class MainController extends BaseController
 
         $orders = $q->get();
 
-
         $data = [
             [
                 'id', 'Форма', 'Получатель', 'Статус', 'Дата оплаты', 'ФИО', 'телефон', 'Email', 'Транзакция', 'Оплата', 'LiqPay', 'TK', 'GP'
@@ -225,7 +205,6 @@ class MainController extends BaseController
         ];
 
         $serviceTitles = SiteContent::where('template', 5)->get()->pluck('pagetitle', 'id');
-
 
         /** @var ServiceOrder[] $orders */
         foreach ($orders as $order) {
@@ -243,13 +222,11 @@ class MainController extends BaseController
                 $order->full_name,
                 $order->phone,
                 $order->email,
-
                 $order->total,
                 $order->sum,
                 $order->liqpay_real_commission,
                 $order->bank_commission,
                 $order->profit,
-
             ];
         }
 
@@ -268,7 +245,6 @@ class MainController extends BaseController
             $sheet->getColumnDimension($columnID)
                 ->setAutoSize(true);
         }
-
 
         //Отдать файл на скачивание в браузер
         $oWriter = IOFactory::createWriter($oSpreadsheet, 'Xlsx');
