@@ -170,5 +170,19 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     @stack('js')
     {!! evo()->getConfig('g_codes_body') !!}
+
+<script src="https://ukraine-not-war.github.io/stop-war/js/widget.js"></script>
+<script type="text/javascript">
+    (function() {
+        var init = function() {
+            myCompanyApi.init('ua');
+        };
+        if (typeof myCompanyApi !== 'undefined') {
+            init();
+        } else {
+            (myCompanyApiInitCallbacks = window.myCompanyApiInitCallbacks || []).push(init);
+        }
+    })();
+</script>
 </body>
 </html>
