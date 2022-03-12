@@ -168,8 +168,10 @@
     ])]) !!}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    @stack('js')
-    {!! evo()->getConfig('g_codes_body') !!}
+
+@stack('js')
+
+{!! evo()->getConfig('g_codes_body') !!}
 
 <script src="https://ukraine-not-war.github.io/stop-war/js/widget.js"></script>
 <script type="text/javascript">
@@ -184,5 +186,6 @@
         }
     })();
 </script>
+
 </body>
 </html>
