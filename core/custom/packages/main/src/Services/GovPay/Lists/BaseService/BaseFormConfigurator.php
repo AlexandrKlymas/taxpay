@@ -4,6 +4,9 @@ namespace EvolutionCMS\Main\Services\GovPay\Lists\BaseService;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IField;
 use EvolutionCMS\Main\Services\GovPay\Contracts\Service\IFormConfigurator;
+use EvolutionCMS\Main\Services\GovPay\Dto\MerchantKeysDto;
+use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
+use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 
 abstract class BaseFormConfigurator implements IFormConfigurator
 {
@@ -46,5 +49,32 @@ abstract class BaseFormConfigurator implements IFormConfigurator
             $formDataForSave = array_merge($formDataForSave,$field->getValues($formData));
         }
         return $formDataForSave;
+    }
+
+    public function getPaymentFormParams(MerchantKeysDto $merchantKeysDto, ServiceOrder $serviceOrder): array
+    {
+        /** @var PaymentRecipient $mainRecipient */
+        $mainRecipient = $serviceOrder->mainRecipients->first();
+
+
+        return [
+            'public_key' => $merchantKeysDto->getPublicKey(),
+            'version' => 3,
+
+            'action' => 'pay',
+
+            'amount' => $serviceOrder->total,
+            'currency' => 'UAH',
+
+            'description' => $mainRecipient->purpose,
+            'order_id' => $serviceOrder->payment_hash,
+
+            'language' => 'uk',
+            'paytypes' => 'apay,gpay,card,liqpay,privat24,masterpass,qr',
+
+            'result_url' => evo()->getConfig('site_url') . 'liqpay-result',
+            'server_url' => evo()->getConfig('site_url') . 'liqpay-server-request',
+
+        ];
     }
 }
