@@ -2,11 +2,9 @@
 
 namespace EvolutionCMS\Main\Services\LiqPay;
 
-
 use EvolutionCMS\Main\Services\GovPay\Dto\MerchantKeysDto;
 use EvolutionCMS\Main\Services\GovPay\Factories\ServiceFactory;
 use EvolutionCMS\Main\Services\GovPay\Managers\ServiceManager;
-use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 use Illuminate\Http\Request;
 use LiqPay;
@@ -64,30 +62,9 @@ class LiqPayService
     {
         $this->initLiqPaySDK($serviceOrder->service_id);
 
+        $serviceFactory = ServiceFactory::makeFactoryForService($serviceOrder->service_id);
 
-        /** @var PaymentRecipient $mainRecipient */
-        $mainRecipient = $serviceOrder->mainRecipients->first();
-
-
-        return [
-            'public_key' => $this->merchantKeysDto->getPublicKey(),
-            'version' => 3,
-
-            'action' => 'pay',
-
-            'amount' => $serviceOrder->total,
-            'currency' => 'UAH',
-
-            'description' => $mainRecipient->purpose,
-            'order_id' => $serviceOrder->payment_hash,
-
-            'language' => 'uk',
-            'paytypes' => 'apay,gpay,card,liqpay,privat24,masterpass,qr',
-
-            'result_url' => evo()->getConfig('site_url') . 'liqpay-result',
-            'server_url' => evo()->getConfig('site_url') . 'liqpay-server-request',
-
-        ];
+        return $serviceFactory->getFormConfigurator()->getPaymentFormParams($this->merchantKeysDto,$serviceOrder);
     }
 
     /**
@@ -120,7 +97,7 @@ class LiqPayService
         }
 
         if ($serviceOrder->total !== $data['amount']) {
-            throw new \Exception('Amount did not match');
+            throw new \Exception('Amount did not match'.$serviceOrder->total.'!='.$data['amount']);
         }
 
         $this->initLiqPaySDK($serviceOrder->service_id);
