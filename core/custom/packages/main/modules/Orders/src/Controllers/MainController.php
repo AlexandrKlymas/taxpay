@@ -44,7 +44,7 @@ class MainController extends BaseController
             165 => 'Податковий збір',
             170 => 'ПЛР-тест',
         ];
-        $services = SiteContent::active()->whereIn('template', [5,11,16,17,18,19])->get()->toArray();
+        $services = SiteContent::active()->whereIn('template', [5,11,16,17,18,19,20])->get()->toArray();
 
         $serviceList = [];
         foreach ($services as $service) {
@@ -110,7 +110,7 @@ class MainController extends BaseController
         $q->select(['service_orders.*','payment_recipients.recipient_name']);
         $q->join('payment_recipients',function ($join){
             $join->on('service_orders.id','=','service_order_id')
-                ->where('recipient_type','main')
+                ->whereIn('recipient_type',['main','direct'])
                 ->limit(1);
         });
 
@@ -139,7 +139,7 @@ class MainController extends BaseController
         $q->select(['service_orders.*','payment_recipients.recipient_name']);
         $q->join('payment_recipients',function ($join){
             $join->on('service_orders.id','=','service_order_id')
-                ->where('recipient_type','main')
+                ->whereIn('recipient_type',['main','direct'])
                 ->limit(1);
         });
 
