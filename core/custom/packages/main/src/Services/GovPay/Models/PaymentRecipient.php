@@ -56,6 +56,8 @@ class PaymentRecipient extends Eloquent
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_FINISHED = 'finished';
 
+    const RECIPIENT_TYPE_DIRECT = 'direct';
+
     const RECIPIENT_TYPE_MAIN = 'main';
     const RECIPIENT_TYPE_SYSTEM = 'system';
 
@@ -79,6 +81,7 @@ class PaymentRecipient extends Eloquent
             $bank = BankItem::where('mfo',$paymentRecipientDto->getMfo())->first();
             $paymentRecipientDto->setRecipientBankName($bank->name??'');
         }
+
         return self::create([
             'service_order_id' => $serviceOrderId,
             'edrpou' =>  $paymentRecipientDto->getEdrpou(),
@@ -99,29 +102,33 @@ class PaymentRecipient extends Eloquent
     public static function generateUniqueCheck(): string
     {
         $rand = '';
+
         for($i=1;$i<=16;$i++){
             $rand .= rand(0,9);
         }
+
         if(self::where('check_id',$rand)->first()){
             $rand = self::generateUniqueCheck();
         }
+
         return $rand;
     }
 
     public static function getTypes(): array
     {
         return [
-            self::RECIPIENT_TYPE_MAIN => 'Основной',
-            self::RECIPIENT_TYPE_SYSTEM => 'Системный',
+            self::RECIPIENT_TYPE_MAIN => 'Основний',
+            self::RECIPIENT_TYPE_DIRECT => 'Прямий',
+            self::RECIPIENT_TYPE_SYSTEM => 'Системний',
         ];
     }
 
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_WAIT => 'Ожидает',
-            self::STATUS_CONFIRMED => 'Подтвержден',
-            self::STATUS_FINISHED => 'Завершен',
+            self::STATUS_WAIT => 'Очікує',
+            self::STATUS_CONFIRMED => 'Підтверджений',
+            self::STATUS_FINISHED => 'Завершений',
         ];
     }
     public function isFinished(): bool
