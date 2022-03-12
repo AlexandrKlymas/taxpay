@@ -3,6 +3,7 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists;
 
 use EvolutionCMS\Main\Services\GovPay\Exceptions\ServiceNotFoundException;
+use EvolutionCMS\Main\Services\GovPay\Lists\Assistance\HelpUA\HelpUAFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\Covid19\PCR\PCRFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\DPS\ECabinetTax\ECabinetTaxFactory;
 use EvolutionCMS\Main\Services\GovPay\Lists\DRS\Marriage\MarriageFactory;
@@ -74,6 +75,10 @@ class ServicesAlias
         173 => [
             'factory'=> VVPayFactory::class,
             'alias'=>'vvpay'
+        ],
+        179 => [
+            'factory'=> HelpUAFactory::class,
+            'alias'=>'helpua'
         ],
     ];
 
