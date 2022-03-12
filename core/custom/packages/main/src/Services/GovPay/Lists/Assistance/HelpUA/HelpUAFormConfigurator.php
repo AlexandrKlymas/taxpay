@@ -74,7 +74,7 @@ class HelpUAFormConfigurator extends BaseFormConfigurator
             'description' => 'Assistance to Ukraine',
             'order_id' => $serviceOrder->payment_hash,
 
-            'language' => 'uk',
+            'language' => 'en',
             'paytypes' => 'apay,gpay,card,liqpay,privat24,masterpass,qr',
 
             'result_url' => evo()->getConfig('site_url') . 'liqpay-result',
