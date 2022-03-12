@@ -31,6 +31,7 @@ class ServiceOrderSuccessController extends BaseController
             }
 
             $this->data['invoice_pdf'] = $serviceOrder->invoice_file_pdf;
+            $this->data['service_id'] = $serviceOrder->service_id;
             $this->data['order_hash'] = $orderHash;
             $this->data['liqpay_transaction_id'] = $serviceOrder->liqpay_transaction_id;
 
