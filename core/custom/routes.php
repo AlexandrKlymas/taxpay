@@ -10,6 +10,7 @@ use EvolutionCMS\Main\Controllers\Department\Services\ECabinetDpsPaymentControll
 use EvolutionCMS\Main\Controllers\Department\Services\FinesController;
 use EvolutionCMS\Main\Controllers\Department\Services\OnlineRequestPoliceProtectionController;
 use EvolutionCMS\Main\Controllers\Department\Services\SudytaxPaymentController;
+use EvolutionCMS\Main\Controllers\HelpuaController;
 use EvolutionCMS\Main\Controllers\Info\ContactsController;
 use EvolutionCMS\Main\Controllers\LiqPayController;
 use EvolutionCMS\Main\Controllers\PaymentController;
@@ -63,4 +64,5 @@ Route::get('/bot/search-fines', [TelegramBotController::class,'searchFinesForAll
 Route::get('/gfs', [ECabinetDpsPaymentController::class,'gfsRoute']);
 Route::post('/sudytax', [SudytaxPaymentController::class,'sudytaxRoute']);
 Route::get('/paymentstests', [DebugPageController::class,'paymentstests']);
+Route::get('/helpua', [\EvolutionCMS\Main\Controllers\Department\Services\HelpuaController::class,'route']);
 
