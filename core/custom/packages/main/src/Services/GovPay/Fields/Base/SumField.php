@@ -2,17 +2,18 @@
 
 namespace EvolutionCMS\Main\Services\GovPay\Fields\Base;
 
-
 use EvolutionCMS\Main\Services\GovPay\Contracts\IField;
 
 class SumField extends AbstractField implements IField
 {
 
-    private $title;
-    private $placeholder;
+    private string $title;
+    private string $placeholder;
     private bool $hidden = false;
     private bool $disabled = false;
     private string $value='';
+    private string $lang = '';
+    private string $currency = 'грн';
 
     public static function build($title = 'Сума сплати',$placeholder= '0.00',$required = true)
     {
@@ -43,6 +44,8 @@ class SumField extends AbstractField implements IField
             'hidden'=>$this->hidden,
             'value'=>$this->value,
             'disabled'=>$this->disabled,
+            'lang'=>$this->lang,
+            'currency'=>$this->currency,
         ]);
     }
 
@@ -65,5 +68,29 @@ class SumField extends AbstractField implements IField
     public function disable()
     {
         $this->disabled = true;
+    }
+
+    public function getLang(): string
+    {
+        return $this->lang;
+    }
+
+    public function setLang(string $lang): SumField
+    {
+        $this->lang = $lang;
+
+        return $this;
+    }
+
+    public function getCurrency():string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency):SumField
+    {
+        $this->currency = $currency;
+
+        return $this;
     }
 }

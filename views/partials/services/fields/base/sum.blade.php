@@ -9,7 +9,7 @@
            placeholder="{{ $placeholder }}">
     @if(empty($hidden))
         <div class="input-group-text">
-            грн
+            {{$currency}}
         </div>
     @endif
 </div>
