@@ -28,7 +28,7 @@ class HelpUARecipientsGenerator implements IRecipientsGenerator
             $this->sumCalculator->calculate($formFieldsValues)
         );
 
-        $directPaymentRecipientDto->setRecipientName('State Payments LLC');
+        $directPaymentRecipientDto->setRecipientName('Government Payments LLC');
         $directPaymentRecipientDto->setRecipientType(PaymentRecipient::RECIPIENT_TYPE_DIRECT);
         $directPaymentRecipientDto->setPurpose('Assistance to Ukraine');
         $directPaymentRecipientDto->setServiceName('HelpUA');

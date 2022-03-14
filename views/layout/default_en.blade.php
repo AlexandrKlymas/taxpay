@@ -90,12 +90,12 @@
 					<span><img src="/theme/images/liqpay.png" alt=""></span>
 				</span>
                 <span class="img">
-					<span><img src="/theme/images/privatbank-29.png" alt=""></span>
+					<span><img src="/theme/images/privatbank.png" alt=""></span>
 				</span>
 
                 </div>
                 <div class="copyright">
-                    <p>© 2014-2022. State Payments LLC</p>
+                    <p>© 2014-2022. Government Payments LLC</p>
                     <p>All rights are protected by the legislation of Ukraine on copyright.</p>
                 </div>
             </div>

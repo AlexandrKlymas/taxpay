@@ -3,13 +3,11 @@
 namespace EvolutionCMS\Main\Services\GovPay\Lists\Assistance\HelpUA;
 
 use EvolutionCMS\Main\Services\GovPay\Dto\MerchantKeysDto;
-use EvolutionCMS\Main\Services\GovPay\Fields\Base\EmailField;
-use EvolutionCMS\Main\Services\GovPay\Fields\Base\SumField;
+use EvolutionCMS\Main\Services\GovPay\Fields\Base\CurrencySum;
 use EvolutionCMS\Main\Services\GovPay\Fields\Base\TextField;
 use EvolutionCMS\Main\Services\GovPay\Fields\FullNameField;
 use EvolutionCMS\Main\Services\GovPay\Fields\LayoutFields;
 use EvolutionCMS\Main\Services\GovPay\Lists\BaseService\BaseFormConfigurator;
-use EvolutionCMS\Main\Services\GovPay\Models\PaymentRecipient;
 use EvolutionCMS\Main\Services\GovPay\Models\ServiceOrder;
 
 class HelpUAFormConfigurator extends BaseFormConfigurator
@@ -41,11 +39,10 @@ class HelpUAFormConfigurator extends BaseFormConfigurator
             ]),
 
             new LayoutFields([
-                SumField::build(
+                CurrencySum::build(
                     'SUM',
                     '0.00'
-                )->setLang('en')
-                ->setCurrency('usd'),
+                )->setLang('en'),
             ])
 
         ];
@@ -54,7 +51,7 @@ class HelpUAFormConfigurator extends BaseFormConfigurator
     public function renderDataForPreview($fieldValues): array
     {
         $form =  [
-            'Прізвище, ім`я та по-батькові'=> $fieldValues['full_name'],
+            'Full name'=> $fieldValues['full_name'],
         ];
 
         return $form;
@@ -69,7 +66,7 @@ class HelpUAFormConfigurator extends BaseFormConfigurator
             'action' => 'pay',
 
             'amount' => $serviceOrder->total,
-            'currency' => 'USD',
+            'currency' => $serviceOrder->form_data['currency'],
 
             'description' => 'Assistance to Ukraine',
             'order_id' => $serviceOrder->payment_hash,

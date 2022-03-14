@@ -15,15 +15,24 @@
             <div class="data-row">
                 <div class="data">
                     <span class="row-name">USREOU:</span>
-                    <span class="val">37993783</span>
+                    <span class="val">39048249</span>
                 </div>
             </div>
+
             <div class="data-row">
                 <div class="data">
                     <span class="row-name">Account:</span>
-                    <span class="val">UA08899998033320939700026001</span>
+                    <span class="val">UA483052990000026005006227540</span>
                 </div>
             </div>
+
+            <div class="data-row">
+                <div class="data">
+                    <span class="row-name">Recipient's name:</span>
+                    <span class="val">GOVERNMENT PAYMENTS LLC</span>
+                </div>
+            </div>
+
             <div class="data-row">
                 <div class="data">
                     <span class="row-name">Bank of beneficiary:</span>
@@ -47,7 +56,7 @@
             <div class="data-row">
                 <div class="data">
                     <span class="row-name">Payment amount:</span>
-                    <span class="val">{{$requestData['sum']}} USD</span>
+                    <span class="val">{{$requestData['sum']}} {{$requestData['currency']}}</span>
                 </div>
             </div>
             <form class="form-payment js-service-form" id="service-form" data-validation-form>

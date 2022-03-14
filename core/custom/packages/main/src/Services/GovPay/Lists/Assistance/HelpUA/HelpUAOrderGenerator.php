@@ -14,6 +14,7 @@ class HelpUAOrderGenerator extends BaseOrderGenerator
     {
         $serviceId = $this->serviceFactory->getServiceId();
         $formFieldsValues = $this->serviceFactory->getFormConfigurator()->getFormFieldsValues($formData);
+        $formFieldsValues['currency'] = $formData['currency'];
 
         $paymentAmountDto = new PaymentAmountDto($formFieldsValues['sum'],0.00,$formFieldsValues['sum']);
         $commissionDto = new CommissionDto($this->calcLiqPayCommission($formFieldsValues['sum']),0.00, 0.00);

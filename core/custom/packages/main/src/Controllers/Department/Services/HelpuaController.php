@@ -21,20 +21,20 @@ class HelpuaController extends BaseController
     {
         $serviceId = evo()->documentIdentifier;
 
-//        $enMenu = [
-//            'Послуги'=>'Services',
-//            'Питання та відповіді' => 'FAQ',
-//            'Оферта'=>'Offer',
-//            'Контакти'=>'Contacts',
-//        ];
-//
-//        foreach ($this->data['menu'] as $k=>$menu){
-//            foreach($enMenu as $key=>$enMenuItem){
-//                if($key==$menu['pagetitle']){
-//                    $this->data['menu'][$k]['pagetitle'] = $enMenuItem;
-//                }
-//            }
-//        }
+        $enMenu = [
+            'Послуги'=>'Services',
+            'Питання та відповіді' => 'FAQ',
+            'Оферта'=>'Offer',
+            'Контакти'=>'Contacts',
+        ];
+
+        foreach ($this->data['menu'] as $k=>$menu){
+            foreach($enMenu as $key=>$enMenuItem){
+                if($key==$menu['pagetitle']){
+                    $this->data['menu'][$k]['pagetitle'] = $enMenuItem;
+                }
+            }
+        }
 
         try {
             $serviceProcessor = new ServiceManager();
