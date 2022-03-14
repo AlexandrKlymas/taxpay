@@ -13,7 +13,7 @@ class CurrencySum extends AbstractField implements IField
     private string $value='';
     private string $lang = '';
     private array $currencies = [
-        'USD','EUR','GBP',
+        'USD','EUR',
     ];
 
     public static function build($title = 'Сума сплати',$placeholder= '0.00',$required = true): CurrencySum
