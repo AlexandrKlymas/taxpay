@@ -1,4 +1,4 @@
-@extends('layout.default')
+@extends('layout.default_en')
 
 @section('content')
     @push('styles')

@@ -3,6 +3,7 @@
 namespace EvolutionCMS\Main\Services\GovPay\Fields\Base;
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IField;
+use EvolutionCMS\Main\Support\Helpers;
 
 class CurrencySum extends AbstractField implements IField
 {
@@ -12,9 +13,7 @@ class CurrencySum extends AbstractField implements IField
     private bool $disabled = false;
     private string $value='';
     private string $lang = '';
-    private array $currencies = [
-        'USD','EUR',
-    ];
+    private array $currencies;
 
     public static function build($title = 'Сума сплати',$placeholder= '0.00',$required = true): CurrencySum
     {
@@ -35,6 +34,9 @@ class CurrencySum extends AbstractField implements IField
         if($required){
             $rules[] = 'required';
         }
+
+        $this->currencies = Helpers::multiFields(
+            json_decode(evo()->getConfig('g_currencies'),true));
 
         parent::__construct($name,$rules);
     }

@@ -64,6 +64,11 @@ return [
             'caption' => 'Номер файла, для экспорта в банк (001), если пусто будет расчитан автоматичиски',
             'type'  => 'text',
         ],
+
+        'currencies' => [
+            'caption' => 'Валюти',
+            'type'  => 'custom_tv:multifields',
+        ],
  
     ],
 ];

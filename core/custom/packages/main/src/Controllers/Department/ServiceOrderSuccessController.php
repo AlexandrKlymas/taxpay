@@ -40,6 +40,23 @@ class ServiceOrderSuccessController extends BaseController
                 $this->data['backref_caption'] = parse_url($serviceOrder->form_data['backref'])['host'] ?? 'сервісу';
             }
 
+            if($serviceOrder->service_id == 179){
+                $enMenu = [
+                    'Послуги'=>'Services',
+                    'Питання та відповіді' => 'FAQ',
+                    'Оферта'=>'Offer',
+                    'Контакти'=>'Contacts',
+                ];
+
+                foreach ($this->data['menu'] as $k=>$menu){
+                    foreach($enMenu as $key=>$enMenuItem){
+                        if($key==$menu['pagetitle']){
+                            $this->data['menu'][$k]['pagetitle'] = $enMenuItem;
+                        }
+                    }
+                }
+            }
+
         } catch (\Exception $e) {
 
             $serviceOrderId = 'no ID';

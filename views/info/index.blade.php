@@ -9,6 +9,7 @@
             <p class="subtitle"><span>державних та муніципальних послуг</span></p>
             <p>Автоматизована<br> інформаційно-сервісна система</p>
             <div><a href="{{ UrlProcessor::makeUrl(3) }}" class="btn">Сплатити</a></div>
+            <div><a style="margin-top:30px" href="/helpua" class="btn">Assistance to the armed forces of Ukraine</a></div>
             <div  style="margin-top:30px"><a href="#zsu" class="btn">Збір коштів на потреби армії України</a></div>
         </div>
     </div>
