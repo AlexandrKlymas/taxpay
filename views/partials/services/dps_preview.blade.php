@@ -17,7 +17,7 @@
                     </div>
                 </div>
             @endforeach
-            <span class="row-name">Сервісний збір складає <strong>{{round($commissions['total']['percent'])}}%</strong>, мінімум <strong>{{$commissions['total']['min_summ']}} грн</strong>.</span>
+            <span class="row-name">Сервісний збір складає <strong>{{round($commissions['total']['percent'])}}%</strong>, мінімум <strong>{{$commissions['total']['min']}} грн</strong>.</span>
         </div>
         <div class="col-6">
             <h4 class="box-title">Отримувач</h4>
@@ -118,7 +118,7 @@
 <script>
     let commissionsList = {!! json_encode($commissions) !!};
     let feeInfo = {
-        min:Number(commissionsList.total.min_summ),
+        min:Number(commissionsList.total.min),
         percent: commissionsList.total.percent / 100
     };
 
