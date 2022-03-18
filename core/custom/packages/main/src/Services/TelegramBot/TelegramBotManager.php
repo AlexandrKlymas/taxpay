@@ -27,23 +27,23 @@ class TelegramBotManager
 
     public function addCar(TelegramBotUser $telegramBotUser,IFineSearchCommand $command)
     {
-        $car = new TelegramBotUserCar([
-            'car_number'=>$command->getLicensePlate(),
-            'document_type'=>get_class($command),
-            'document_info'=>$command->toArray()
-        ]);
-        $telegramBotUser->cars()->save($car);
-
-
-
-
-        $this->bot->sendMessage(
-            $telegramBotUser->chat_id,
-            "🚙 Авто ".$command->getLicensePlate()." та 🆔".$command->getDocumentId()." додано в Ваш список. Відтепер ви отримуватимете повідомлення про нові постанови."
-        );
-
-        (new TelegramBotUserCarsFineSearcher())->searchFinesForCar($car);
-        (new TelegramBotUserFinesNotificationSender())->sendNotification();
+//        $car = new TelegramBotUserCar([
+//            'car_number'=>$command->getLicensePlate(),
+//            'document_type'=>get_class($command),
+//            'document_info'=>$command->toArray()
+//        ]);
+//        $telegramBotUser->cars()->save($car);
+//
+//
+//
+//
+//        $this->bot->sendMessage(
+//            $telegramBotUser->chat_id,
+//            "🚙 Авто ".$command->getLicensePlate()." та 🆔".$command->getDocumentId()." додано в Ваш список. Відтепер ви отримуватимете повідомлення про нові постанови."
+//        );
+//
+//        (new TelegramBotUserCarsFineSearcher())->searchFinesForCar($car);
+//        (new TelegramBotUserFinesNotificationSender())->sendNotification();
 
     }
 }

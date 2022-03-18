@@ -19,8 +19,8 @@ class CronCommand extends Command
 
  
 
-        $scheduler->raw("$phpPath $corePath/artisan bot:search-fines")->at('0,20,40 * * * *');
-        $scheduler->raw("$phpPath $corePath/artisan bot:notification-send")->at('5,25,45 * * * *');
+//        $scheduler->raw("$phpPath $corePath/artisan bot:search-fines")->at('0,20,40 * * * *');
+//        $scheduler->raw("$phpPath $corePath/artisan bot:notification-send")->at('5,25,45 * * * *');
 
 
         $scheduler->raw("$phpPath $corePath/artisan bank:export")->at('55 16 * * 1-5');
@@ -34,7 +34,7 @@ class CronCommand extends Command
 
         $scheduler->raw("$phpPath $corePath/artisan service_orders:finish")->at('*/15 * * * *');
 
-        $scheduler->raw("$phpPath $corePath/artisan parse:fines")->at('*/5 * * * *');
+//        $scheduler->raw("$phpPath $corePath/artisan parse:fines")->at('*/5 * * * *');
 
         $scheduler->raw("$phpPath $corePath/artisan sudytax:findcallbacks")->at('22 * * * *');
 

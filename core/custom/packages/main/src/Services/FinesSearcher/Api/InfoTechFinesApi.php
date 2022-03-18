@@ -1,15 +1,12 @@
 <?php
 
-
 namespace EvolutionCMS\Main\Services\FinesSearcher\Api;
-
 
 use EvolutionCMS\Main\Services\GovPay\Contracts\IFinesApi;
 use Illuminate\Support\Facades\Http;
 
 class InfoTechFinesApi implements IFinesApi
 {
-
     private $token;
     /**
      * @var bool
@@ -18,7 +15,7 @@ class InfoTechFinesApi implements IFinesApi
     /**
      * @var string
      */
-    private $version;
+    private string $version;
 
     public function __construct()
     {
@@ -28,6 +25,7 @@ class InfoTechFinesApi implements IFinesApi
         $email = 'admin@govpay24.ua';
         $password = 'mctc6AgWW@vAVii';
 
+        return '';
         return $this->token = Http::asForm()
             ->post('https://services.infotech.gov.ua/Token', [
                 'grant_type' => 'password',
