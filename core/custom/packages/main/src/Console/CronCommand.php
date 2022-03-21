@@ -17,6 +17,7 @@ class CronCommand extends Command
         $corePath = EVO_CORE_PATH;
         $scheduler = new Scheduler();
 
+//        evo()->logEvent(1,1,1,'cronLog');
  
 
 //        $scheduler->raw("$phpPath $corePath/artisan bot:search-fines")->at('0,20,40 * * * *');

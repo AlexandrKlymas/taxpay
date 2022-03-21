@@ -1,7 +1,10 @@
 <?php
+
 namespace EvolutionCMS\Main\Console\Bank;
 
+use EvolutionCMS\Main\Services\PaymentsToBankSender\ProcessedPaymentChecker;
 use Illuminate\Console\Command;
+use PHPMailer\PHPMailer\Exception;
 
 class BankImportCommand extends Command
 {
@@ -9,9 +12,10 @@ class BankImportCommand extends Command
 
     protected $description = 'Get and check transaction from bank';
 
-
+    /**
+     * @throws Exception
+     */
     public function handle(){
-
 
         $params = [];
         if(!empty($this->option('day-type'))){
@@ -20,6 +24,6 @@ class BankImportCommand extends Command
 
         evo()->logEvent(123,1,'Начало выгрузки в банк, количество транзакция ','CRON BankImport');
 
-        (new \EvolutionCMS\Main\Services\PaymentsToBankSender\ProcessedPaymentChecker(...$params))->getProcessedPaymentsAndCheck();
+        (new ProcessedPaymentChecker(...$params))->getProcessedPaymentsAndCheck();
     }
 }
