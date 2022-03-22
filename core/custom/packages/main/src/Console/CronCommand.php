@@ -24,20 +24,20 @@ class CronCommand extends Command
 //        $scheduler->raw("$phpPath $corePath/artisan bot:notification-send")->at('5,25,45 * * * *');
 
 
-        $scheduler->raw("$phpPath $corePath/artisan bank:export")->at('55 16 * * 1-5');
+        $scheduler->raw("$phpPath $corePath/artisan bank:export")->at('50 16 * * 1-5');
 //        Создаем проводки для банка и отправляем ему на фтп (будние 09:05-16:05 каждый час) было (будние 09:05-14:05 каждый час)
-        $scheduler->raw("$phpPath $corePath/artisan bank:export")->at('6,36 9-17 * * 1-6');
+        $scheduler->raw("$phpPath $corePath/artisan bank:export")->at('10,40 9-17 * * 1-6');
 
 
 
-        $scheduler->raw("$phpPath $corePath/artisan bank:import")->at('2,32 * * * *');
+        $scheduler->raw("$phpPath $corePath/artisan bank:import")->at('0,30 * * * *');
         $scheduler->raw("$phpPath $corePath/artisan bank:import --day-type=yesterday")->at('0 1 * * *');
 
         $scheduler->raw("$phpPath $corePath/artisan service_orders:finish")->at('*/15 * * * *');
 
 //        $scheduler->raw("$phpPath $corePath/artisan parse:fines")->at('*/5 * * * *');
 
-        $scheduler->raw("$phpPath $corePath/artisan sudytax:findcallbacks")->at('22 * * * *');
+        $scheduler->raw("$phpPath $corePath/artisan sudytax:findcallbacks")->at('20 * * * *');
 
 
         //запуска воркера очередей, каждую минуту
