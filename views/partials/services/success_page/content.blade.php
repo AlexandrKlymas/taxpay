@@ -67,13 +67,13 @@
                 </button>
             </div>
 
-            @if(!empty($backref))
-                <div class="successful-footer">
-                    <a href="{{$backref}}" class="successful-btn btn-review-noicon">
-                        Повернутись до {{$backref_caption}}
-                    </a>
-                </div>
-            @endif
+{{--            @if(!empty($backref))--}}
+{{--                <div class="successful-footer">--}}
+{{--                    <a href="{{$backref}}" class="successful-btn btn-review-noicon">--}}
+{{--                        Повернутись до {{$backref_caption}}--}}
+{{--                    </a>--}}
+{{--                </div>--}}
+{{--            @endif--}}
 
             @if(evo()->getConfig('prod') === true)
                 <script> gtag('event', 'conversion', {
