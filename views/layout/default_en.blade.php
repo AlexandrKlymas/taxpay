@@ -95,7 +95,7 @@
 
                 </div>
                 <div class="copyright">
-                    <p>© 2014-2022. Government Payments LLC</p>
+                    <p>© 2014-{{ date('Y') }}. Government Payments LLC</p>
                     <p>All rights are protected by the legislation of Ukraine on copyright.</p>
                 </div>
             </div>

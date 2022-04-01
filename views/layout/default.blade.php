@@ -86,10 +86,13 @@
                     <span class="img">
 					<span><img src="/theme/images/liqpay.png" alt=""></span>
 				</span>
+                    <span class="img">
+					<span><img src="/theme/images/privatbank.png" alt=""></span>
+				</span>
 
                 </div>
                 <div class="copyright">
-                    <p>© 2021. ТОВ “Державнi платежi”</p>
+                    <p>© 2014-{{ date('Y') }}. ТОВ “Державнi платежi”</p>
                     <p>Всі права захищені законодавством України з авторського права.</p>
                 </div>
             </div>
