@@ -78,9 +78,10 @@
                                        data-validation-minsumm="1"
                                        data-validation-errormsgminsumm="Сума менше мінімальної"
                                        data-validation-pattern="^(\d{1,}\.?\d?\d?)$"
-                                       data-validation-errormsg="Невірний формат"
+                                       data-validation-error-msg-pattern="Не вірний формат"
+                                       data-validation-error-msg-required="Обов'язкове поле"
                                        data-validation-has-keyup-event="true"
-                                ><span class="val"> грн</span>
+                                ><span class="val" style="margin-right: 5px;"> грн</span>
                             @else
                                 <input type="hidden" name="{{$name}}" value="{{$value}}">
                             @endif

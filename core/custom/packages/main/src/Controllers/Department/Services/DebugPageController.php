@@ -47,7 +47,7 @@ class DebugPageController
                 'phone'=>'3456345634563456',
                 'email'=>'klimssalex@gmail.com',
                 'budgetcode'=>'101',
-                'amount'=>'1',
+                'amount'=>'0',
                 'submit'=>'true',
                 'sign'=>''
             ];
