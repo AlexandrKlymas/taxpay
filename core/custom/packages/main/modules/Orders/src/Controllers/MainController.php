@@ -96,6 +96,7 @@ class MainController extends BaseController
             'total' => $order->total,
             'sum' => $order->sum,
             'liqpay_real_commission' => $order->liqpay_real_commission,
+            'liqpay_commission_auto_calculated' => $order->liqpay_commission_auto_calculated,
             'bank_commission' => $order->bank_commission,
             'profit' => $order->profit,
 

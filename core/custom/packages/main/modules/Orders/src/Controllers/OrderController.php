@@ -35,6 +35,7 @@ class OrderController extends BaseController
             'total' => $order->total,
             'sum' => $order->sum,
             'liqpay_real_commission' => $order->liqpay_real_commission,
+            'liqpay_commission_auto_calculated' => $order->liqpay_commission_auto_calculated,
             'bank_commission' => $order->bank_commission,
             'profit' => $order->profit,
 
@@ -116,6 +117,7 @@ class OrderController extends BaseController
         $serviceOrder->total = round(floatval($serviceOrderData['total']),2);
         $serviceOrder->sum = round(floatval($serviceOrderData['sum']),2);
         $serviceOrder->liqpay_real_commission = round(floatval($serviceOrderData['liqpay_real_commission']),2);
+        $serviceOrder->liqpay_commission_auto_calculated = round(floatval($serviceOrderData['liqpay_commission_auto_calculated']),2);
         $serviceOrder->bank_commission = round(floatval($serviceOrderData['bank_commission']),2);
         $serviceOrder->profit = round(floatval($serviceOrderData['profit']),2);
         $serviceOrder->historyUpdate('Зміни з адмін панелі');
